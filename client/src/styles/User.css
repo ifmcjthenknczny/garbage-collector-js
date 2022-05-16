@@ -1,0 +1,11 @@
+.Link {
+    text-decoration: none;
+}
+
+.dark-theme td, .dark-theme th {
+    color: white;
+}
+
+.dark-theme .Link {
+    color: aqua;
+}

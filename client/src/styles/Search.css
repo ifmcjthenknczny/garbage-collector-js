@@ -1,0 +1,7 @@
+.fa-magnifying-glass {
+    cursor: pointer;
+}
+
+.Search {
+    width: clamp(200px, 30vw, 400px)
+}

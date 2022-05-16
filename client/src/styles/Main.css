@@ -1,0 +1,9 @@
+.dark-theme {
+  background: black;
+  color: white;
+}
+
+.dark-theme .Main__title-name {
+  color: white;
+}
+/*# sourceMappingURL=Main.css.map */

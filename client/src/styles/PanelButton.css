@@ -1,0 +1,37 @@
+.fa-solid {
+    cursor: pointer;
+}
+
+.fa-unlock-keyhole:hover, .fa-crown:hover, .fa-eye:hover, .fa-circle-plus:hover, .fa-gear:hover {
+    color: green;
+    transition: .2s;
+}
+
+.fa-ban:hover, .fa-trash-can:hover, .fa-fire-flame-curved:hover {
+    color: #bb2d3b !important;
+    transition: .25s;
+}
+
+.info {
+    position: relative;
+    display: inline-block;
+    transform: translateX(10px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.fa-solid .info {
+    visibility: hidden;
+    background-color: darkgrey;
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.fa-solid:hover .info {
+    visibility: visible;
+}
