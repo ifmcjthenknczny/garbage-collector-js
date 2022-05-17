@@ -10,6 +10,7 @@ import Admin from './Admin'
 import UserPage from './UserPage'
 import CollectionPage from './CollectionPage'
 import ItemPage from './ItemPage'
+// import ItemPage from './ItemPage'
 
 function Main(props) {
     const ctxTheme = useContext(ThemeContext);
@@ -26,7 +27,6 @@ function Main(props) {
                 <Route path='/item/:itemId' element={<ItemPage />} exact />
 
                 <Route path='' element={<Frontpage theme={themeClassName} />} />
-
             </Routes>
             <Footer theme={themeClassName} />
         </div>

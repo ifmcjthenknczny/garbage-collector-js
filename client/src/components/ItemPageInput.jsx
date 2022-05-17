@@ -23,10 +23,10 @@ export default function ItemInput(props) {
     }
 
     return (
-        <tr className="ItemPageInput text-center">
-            <td><input type="text" className="text-center border border-primary rounded" value={propertyName} onChange={handleNameChange} /></td>
-            <td><input type="text" className="text-center border border-primary rounded" value={propertyValue} onChange={handleValueChange} /></td>
-            <td><div className="buttons"><PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClick} /></div></td>
+        <tr className="ItemPageInput">
+            <td><input type="text" className="border border-primary rounded" value={propertyName} onChange={handleNameChange} /></td>
+            <td><input type="text" className="border border-primary rounded" value={propertyValue} onChange={handleValueChange} /></td>
+            <td><div className="buttons"><PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-5" onClick={handleClick} /></div></td>
         </tr>
     )
 }

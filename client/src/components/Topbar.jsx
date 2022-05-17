@@ -34,8 +34,8 @@ export default function Topbar() {
             </div>
             {ctxAuth.isLoggedIn ?
                 <div className="Topbar__bottom mb-4 d-flex justify-content-evenly align-items-center">
-                    {ctxAuth.isAdmin ? <button className="btn btn-danger align-self-center" onClick={() => navigate('/admin')}>Admin Panel</button> : ""}
-                    <span className="Topbar__loggedUser">logged as {ctxAuth.loggedUser}</span>
+                    {ctxAuth.isAdmin ? <button className="btn btn-danger align-self-center" onClick={() => navigate('/admin')}>{dictionary.adminpanel[ctxLang.language]}</button> : ""}
+                    <span className="Topbar__loggedUser">{dictionary.loggedas[ctxLang.language]} <Link to={"/user/".concat(ctxAuth.loggedUser)}>{ctxAuth.loggedUser}</Link></span>
                 </div> : ""}
         </header>
     )

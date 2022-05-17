@@ -82,8 +82,8 @@ export default function Login(props) {
             ctxAuth.onLogin(username);
             navigateAddress = `/user/${username}`
         }
-        setTimeout(navigate(navigateAddress), 2000)
-        // navigate(-1)
+        // setTimeout(navigate(navigateAddress), 2000)
+        navigate(-1)
     }
 
     const handleFocus = (evt) => {

@@ -23,14 +23,6 @@ export default function CollectionPage() {
     fetchCollectionData();
   }, [])
 
-  // name: String,
-  // description: String,
-  // topic: String,
-  // imageLink: String,
-  // author: String,
-  // items: Number,
-  // created: Date
-
   const { collectionId: id } = params;
   let { name, description, topic, imageLink, author, items, created } = collectionData;
   created = new Date(created).toLocaleString(ctxLang.language)

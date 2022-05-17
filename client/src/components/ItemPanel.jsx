@@ -110,7 +110,7 @@ export default function ItemPanel(props) {
   // added: Date,
   // rest: Map
 
-  const labels = [dictionary.name[ctxLang.language], dictionary.tags[ctxLang.language]]
+  const labels = [dictionary.name[ctxLang.language], `${dictionary.tags[ctxLang.language]} (${dictionary.commasep[ctxLang.language]})`]
   if (items.length > 0) Object.keys(items[0].rest).forEach(e => labels.push(e))
   const labelsHTML = labels.map(e => <th>{e}</th>)
   const itemsData = items.map(e => <Item key={e._id} id={e._id} name={e.name} tags={e.tags} rest={e.rest} editable={editable} added={e.added.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedItems} />)

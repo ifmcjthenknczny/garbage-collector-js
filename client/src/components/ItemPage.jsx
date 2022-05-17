@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import '../styles/CollectionPage.css'
 import dictionary from '../content';
 import LangContext from '../context/lang-context';
 import AuthContext from '../context/auth-context';
@@ -11,87 +10,76 @@ import PanelButton from './PanelButton'
 import '../styles/ItemPage.css'
 import CommentSection from './CommentSection';
 import ItemPageInput from './ItemPageInput'
+import Likebar from './Likebar';
+import LoadingSpinner from './LoadingSpinner'
 
-export default function ItemPage(props) {
-  const params = useParams();
-  const navigate = useNavigate();
+export default function ItemPage() {
+    const params = useParams();
+    const navigate = useNavigate();
 
-  const [itemData, setItemData] = useState({})
-  const [loaded, setLoaded] = useState(false)
-  const ctxAuth = useContext(AuthContext);
-  const ctxLang = useContext(LangContext)
+    const [itemData, setItemData] = useState({})
+    const [loaded, setLoaded] = useState(false)
+    const ctxAuth = useContext(AuthContext);
+    const ctxLang = useContext(LangContext)
 
-  useEffect(() => {
-    fetchItemData();
-    console.log(itemData)
-  }, [])
+    useEffect(() => {
+        fetchItemData();
+    }, [])
 
-  const { itemId: id } = params;
+    const { itemId: id } = params;
+    const { name, tags, added, collectionId, collectionName, likesFrom, rest, author } = itemData;
+    // added = new Date(added).toLocaleString(ctxLang.language)
+    const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
 
-  let { name, tags, added, collectionId, collectionName, likesFrom, rest, author } = itemData;
-  const likes = likesFrom.length
-  added = new Date(added).toLocaleString(ctxLang.language)
-  const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
-
-  let likeText = '';
-  switch (+likes) {
-    case 0: {
-      likeText = dictionary.nolikes[ctxLang.language];
-      break;
+    const fetchItemData = async () => {
+        setLoaded(false)
+        const iData = await axios.get(`${DB_HOST}/api/items/${id}`);
+        const { collectionId } = iData.data
+        const collectionData = await axios.get(`${DB_HOST}/api/collections/${collectionId}`);
+        const newState = { ...iData.data, collectionName: collectionData.data.name, author: collectionData.data.author }
+        setItemData(newState)
+        setLoaded(true)
     }
-    case 1: {
-      likeText = dictionary.onelike[ctxLang.language];
-      break;
+
+    const handleAddProperty = async (payload) => {
+        const patchUrl = `${DB_HOST}/api/items/${id}`
+        const body = { rest: {...itemData.rest, ...payload}}
+        await axios.patch(patchUrl, body)
+        await fetchItemData()
     }
-    default: {
-      likeText = `${likes} ${dictionary.morelikes[ctxLang.language]}!`;
+
+    const handleEditProperty = async () => {
+
     }
-  }
 
-  const handleAddProperty = async () => {
+    // const handleDeleteProperty = async () => {
 
-  }
+    // }
 
-  const handleEditProperty = async () => {
+    return (
+        <div className="ItemPage d-flex flex-column align-items-center">
+            {/* {!loaded ? <LoadingSpinner /> : ""} */}
+            <div className="ItemPage__header">
+                <h3 className="ItemPage__name">{name}</h3>
+                <h5 className="ItemPage__ownership">{dictionary.itemof[ctxLang.language]} <Link className="Link" to={"/collection/".concat(collectionId)}>{collectionName}</Link> {dictionary.byuser[ctxLang.language]} <Link className="Link" to={"/user/".concat(author)}>{author}</Link></h5>
+            </div>
+            {likesFrom ? <Likebar itemId={id} whoLiked={likesFrom} /> : ""}
 
-  }
+            <table className="ItemPage__table mt-5 table align-self-center text-start">
+                <tbody>
+                    <tr><td>{dictionary.added[ctxLang.language]}:</td><td>{new Date(added).toLocaleString(ctxLang.language)}</td><td></td></tr>
+                    <tr><td>{dictionary.tags[ctxLang.language]}:</td><td>{tags ? tags.join(', ') : ''}</td><td><div className="buttons"><PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-5" onClick={handleEditProperty} /></div></td></tr>
+                    {rest ? Object.keys(rest).map(e => <tr><td>{e}:</td><td>{rest[e]}</td></tr>) : ''}
+                    {editable ? <ItemPageInput clickFunction={handleAddProperty} /> : <tr></tr>}
+                </tbody>
+            </table>
 
-  const handleDeleteProperty = async () => {
-
-  }
-
-
-  const fetchItemData = async () => {
-    const data = await axios.get(`${DB_HOST}/api/items/${id}`);
-    setItemData(data.data);
-    const { collectionId } = itemData;
-    const collectionData = await axios.get(`${DB_HOST}/api/collections/${collectionId}`);
-    setItemData({ ...itemData, collectionName: collectionData.data.name, author: collectionData.data.author })
-    setLoaded(true)
-  }
-
-  return (
-    <div className="ItemPage">
-      <div className="ItemPage__header">
-        <h3 className="ItemPage__name">{name}</h3>
-        <h5 className="ItemPage__ownership">{dictionary.itemof[ctxLang.language]} <Link className="Link" to={"/collection/".concat(collectionId)}>{collectionName}</Link> {dictionary.byuser[ctxLang.language]} <Link className="Link" to={"/user/".concat(author)}>{author}</Link></h5>
-        <p className="ItemPage__likeText me-3">{likeText}</p>
-        <PanelButton className="fa-solid fa-thumbs-up ItemPage__likeButton fs-3" text={dictionary.likeit[ctxLang.language]} onClick={() => { }} />
-      </div>
-      <table className="ItemPage__table mt-5 table align-self-center text-start">
-        <tr><td></td><td>{dictionary.added[ctxLang.language]}:</td><td>{added}</td></tr>
-        <tr><td></td><td>{dictionary.tags[ctxLang.language]}:</td><td>{tags.join(', ')}</td></tr>
-        {Object.keys(rest).map(e => <tr><td>{e}:</td><td>{rest[e]}</td></tr>)}
-        {editable ? <ItemPageInput clickFunction={handleAddProperty} /> : ""}
-      </table>
-
-
-      {/* <PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={handleDeleteProperty} />
+            {/* <PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={handleDeleteProperty} />
             <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleEditProperty} /> */}
 
-      <Button classname="mt-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
-      <CommentSection itemId={id} />
+            <Button className="mt-5 mb-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
+            <CommentSection className="mt-5" itemId={id} />
+        </div>
+    )
 
-    </div>
-  )
 }

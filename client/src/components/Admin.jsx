@@ -94,7 +94,7 @@ export default function Admin(props) {
     }
 
     const labels = [`${dictionary.username[ctxLang.language]}`, 'E-mail', `${dictionary.lastlogin[ctxLang.language]}`, `${dictionary.regtime[ctxLang.language]}`, 'Status', 'Admin']
-    const labelsHTML = labels.map(e => <th>{e}</th>)
+    const labelsHTML = labels.map(e => <th key={e}>{e}</th>)
     const usersData = users.map(e => <User key={e.id} className={theme} id={e._id} name={e.username} email={e.email} lastlogin={e.lastLogin} regtime={e.registrationTime} status={e.isActive ? `${dictionary.active[ctxLang.language]}` : `${dictionary.blocked[ctxLang.language]}`} isAdmin={e.isAdmin} checkboxEvent={updateCheckedUsers} />)
 
     return (

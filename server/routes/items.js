@@ -52,7 +52,8 @@ router.route('/:itemId/comments').get((req, res) => {
 
 router.route('/latest').get(async (req, res) => {
     const collections = await Item.find({})
-    const sortedCollections = Object.values(collections).sort((a, b) => b.added - a.added);
+    const sortedCollections = Object.values(collections).sort((a, b) => b[added.getTime()] - a[added.getTime()]);
+    console.log(sortedCollections);
     return res.status(200).json(sortedCollections.slice(0, 5));
 })
 
@@ -60,8 +61,20 @@ router.route('/:id/like').patch((req, res) => {
     Item.updateOne({
             _id: req.params.id
         }, {
-            $inc: {
-                likesFrom: req.body.change
+            $push: {
+                likesFrom: req.body.payload
+            }
+        })
+        .then(() => res.status(200).json(`Colection updated!`))
+        .catch(err => res.status(400).json(`Error: ${err}`))
+})
+
+router.route('/:id/unlike').patch((req, res) => {
+    Item.updateOne({
+            _id: req.params.id
+        }, {
+            $pull: {
+                likesFrom: req.body.payload
             }
         })
         .then(() => res.status(200).json(`Colection updated!`))

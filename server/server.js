@@ -4,6 +4,7 @@ import cors from 'cors';
 import userRouter from './routes/users.js';
 import itemRouter from './routes/items.js';
 import collectionRouter from './routes/collections.js';
+import commentRouter from './routes/comments.js';
 import 'dotenv/config';
 
 const app = express();
@@ -26,6 +27,7 @@ connection.once('open', () => {
 app.use('/api/users', userRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/collections', collectionRouter);
+app.use('/api/comments', commentRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)

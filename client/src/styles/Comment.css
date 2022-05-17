@@ -1,0 +1,3 @@
+.Comment {
+    width: clamp(200px, 22vw, 400px)
+}

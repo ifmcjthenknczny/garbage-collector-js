@@ -1,3 +1,13 @@
+.Main__title-name {
+  color: #131313;
+  letter-spacing: .1em;
+  text-shadow: 1px -1px #767676;
+}
+
+button {
+  width: 100px;
+}
+
 .dark-theme {
   background: black;
   color: white;
@@ -5,5 +15,9 @@
 
 .dark-theme .Main__title-name {
   color: white;
+}
+
+.Link {
+  text-decoration: none;
 }
 /*# sourceMappingURL=Main.css.map */

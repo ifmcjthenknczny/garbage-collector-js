@@ -270,6 +270,38 @@ const dictionary = {
     added: {
         en: "Added",
         pl: "Dodano"
+    },
+    commasep: {
+        en: "comma separated",
+        pl: "oddzielone przecinkiem"
+    },
+    loginlike: {
+        en: "Log in and like!",
+        pl: "Zaloguj się i polub!"
+    },
+    addcomm: {
+        en: "Add comment!",
+        pl: "Dodaj komentarz!"
+    },
+    typecomm: {
+        en: "Type your comment here...",
+        pl: "Wpisz swój komentarz tutaj..."
+    },
+    adminpanel: {
+        en: "Admin panel",
+        pl: "Panel admina"
+    },
+    loggedas: {
+        en: "logged as",
+        pl: "zalogowano jako"
+    },
+    dontlikeit: {
+        en: "I don't like it anymore",
+        pl: "Już nie lubię t,ego"
+    },
+    loading: {
+        en: "Loading...",
+        pl: "Ładowanie..."
     }
 }
 

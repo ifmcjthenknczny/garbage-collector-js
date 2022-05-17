@@ -22,7 +22,7 @@ export default function Bestlist(props) {
                 {header}
             </h4>
             <ol className="list-group list-group-numbered">
-                {top.map(p => <BestlistElement key={p._id} name={p.name} bottomValue={p[bottomValueName]} topValue={p[topValueName]} />)}
+                {/* {top ? top.map(p => <BestlistElement key={p._id} name={p.name} bottomValue={p[bottomValueName]} topValue={p[topValueName]} />) : ""} */}
             </ol>
         </div>
     )
