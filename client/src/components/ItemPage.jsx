@@ -6,12 +6,13 @@ import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import DB_HOST from "../DB_HOST"
 import Button from './Button'
-import PanelButton from './PanelButton'
 import '../styles/ItemPage.css'
 import CommentSection from './CommentSection';
 import ItemPageInput from './ItemPageInput'
 import Likebar from './Likebar';
 import LoadingSpinner from './LoadingSpinner'
+import ItemProperty from './ItemProperty';
+import { filterFromObject } from '../helpers';
 
 export default function ItemPage() {
     const params = useParams();
@@ -19,6 +20,9 @@ export default function ItemPage() {
 
     const [itemData, setItemData] = useState({})
     const [loaded, setLoaded] = useState(false)
+    const [editOn, setEditOn] = useState(false)
+    const [propertyToEdit, setPropertyToEdit] = useState({});
+
     const ctxAuth = useContext(AuthContext);
     const ctxLang = useContext(LangContext)
 
@@ -28,7 +32,6 @@ export default function ItemPage() {
 
     const { itemId: id } = params;
     const { name, tags, added, collectionId, collectionName, likesFrom, rest, author } = itemData;
-    // added = new Date(added).toLocaleString(ctxLang.language)
     const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
 
     const fetchItemData = async () => {
@@ -36,25 +39,39 @@ export default function ItemPage() {
         const iData = await axios.get(`${DB_HOST}/api/items/${id}`);
         const { collectionId } = iData.data
         const collectionData = await axios.get(`${DB_HOST}/api/collections/${collectionId}`);
-        const newState = { ...iData.data, collectionName: collectionData.data.name, author: collectionData.data.author }
+        let newState = { ...iData.data, collectionName: collectionData.data.name, author: collectionData.data.author }
         setItemData(newState)
         setLoaded(true)
     }
 
-    const handleAddProperty = async (payload) => {
+    const addOrEditProperty = async (payload, action) => {
         const patchUrl = `${DB_HOST}/api/items/${id}`
-        const body = { rest: {...itemData.rest, ...payload}}
+        const body = { rest: { ...itemData.rest, ...payload } }
         await axios.patch(patchUrl, body)
+        if (action === 'edit') editEnd()
+        else if (action === 'add') fetchItemData()
+    }
+
+    const handleClickEdit = async (body) => {
+        if (editOn) return
+        setEditOn(true)
+        setItemData({...itemData, rest: filterFromObject(itemData.rest, body)})
+        setPropertyToEdit(body)
+    }
+
+    const editEnd = async () => {
+        setEditOn(false)
+        setPropertyToEdit({})
         await fetchItemData()
     }
 
-    const handleEditProperty = async () => {
-
+    const handleDeleteProperty = async (payload) => {
+        const patchUrl = `${DB_HOST}/api/items/${id}`
+        const { [Object.keys(payload)]: removedProperty, ...newRest } = itemData.rest;
+        const body = { rest: newRest }
+        await axios.patch(patchUrl, body)
+        await fetchItemData();
     }
-
-    // const handleDeleteProperty = async () => {
-
-    // }
 
     return (
         <div className="ItemPage d-flex flex-column align-items-center">
@@ -68,17 +85,15 @@ export default function ItemPage() {
             <table className="ItemPage__table mt-5 table align-self-center text-start">
                 <tbody>
                     <tr><td>{dictionary.added[ctxLang.language]}:</td><td>{new Date(added).toLocaleString(ctxLang.language)}</td><td></td></tr>
-                    <tr><td>{dictionary.tags[ctxLang.language]}:</td><td>{tags ? tags.join(', ') : ''}</td><td><div className="buttons"><PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-5" onClick={handleEditProperty} /></div></td></tr>
-                    {rest ? Object.keys(rest).map(e => <tr><td>{e}:</td><td>{rest[e]}</td></tr>) : ''}
-                    {editable ? <ItemPageInput clickFunction={handleAddProperty} /> : <tr></tr>}
+                    <tr><td>{dictionary.tags[ctxLang.language]}:</td><td>{tags ? tags.join(', ') : ''}</td><td></td></tr>
+                    {rest ? Object.keys(rest).map(e => <ItemProperty name={e} value={rest[e]} editable={editable} editFunction={handleClickEdit} deleteFunction={handleDeleteProperty} />) : ''}
+                    {editOn ? <ItemPageInput clickFunction={addOrEditProperty} startName={Object.keys(propertyToEdit).at(-1)} startValue={Object.values(propertyToEdit).at(-1)} edited={true} /> : <tr></tr>}
+                    {editable && !editOn ? <ItemPageInput clickFunction={addOrEditProperty} /> : <tr></tr>}
                 </tbody>
             </table>
 
-            {/* <PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={handleDeleteProperty} />
-            <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleEditProperty} /> */}
-
             <Button className="mt-5 mb-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
-            <CommentSection className="mt-5" itemId={id} />
+            <CommentSection itemId={id} />
         </div>
     )
 

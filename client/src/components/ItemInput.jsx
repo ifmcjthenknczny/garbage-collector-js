@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import LangContext from '../context/lang-context';
 import dictionary from '../content';
+import { removeDuplicates } from '../helpers';
 import '../styles/ItemInput.css'
 
 export default function ItemInput(props) {
@@ -19,7 +20,7 @@ export default function ItemInput(props) {
     const body = {
       "name": nameValue,
       "collectionId": collectionId,
-      "tags": tagsValue.split(', ')
+      "tags": removeDuplicates(tagsValue.split(', '))
     }
     clickFunction(body)
   }

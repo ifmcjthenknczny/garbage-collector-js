@@ -297,11 +297,35 @@ const dictionary = {
     },
     dontlikeit: {
         en: "I don't like it anymore",
-        pl: "Już nie lubię t,ego"
+        pl: "Już nie lubię tego"
     },
     loading: {
         en: "Loading...",
         pl: "Ładowanie..."
+    },
+    propname: {
+        en: "property name",
+        pl: "nazwa właściwości"
+    },
+    propval: {
+        en: "property value",
+        pl: "wartość właściwości"
+    },
+    confirm: {
+        en: "confirm",
+        pl: "potwierdź"
+    },
+    error: {
+        en: "error",
+        pl: "błąd"
+    },
+    lost: {
+        en: "It seems that you are lost. Would you like to go",
+        pl: "Wygląda na to, że się zgubiłeś. Chciałbyś może wrócić"
+    },
+    home: {
+        en: "home",
+        pl: "do domu"
     }
 }
 

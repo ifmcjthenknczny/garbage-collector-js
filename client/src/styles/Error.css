@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.Error__symbol {
+    font-size: 10rem;
+    background: -webkit-linear-gradient(45deg, lightblue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.Error__title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 5rem;
+    text-shadow: 6px 4px rgba(255, 215, 0, .8);
+    background: -webkit-linear-gradient(45deg, orange, purple);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.Error__text {
+    font-family: 'Press Start 2P', cursive;
+    background: -webkit-linear-gradient(45deg, orange, purple);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.Link {
+    text-decoration: none;
+    background: -webkit-linear-gradient(91deg, lightblue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

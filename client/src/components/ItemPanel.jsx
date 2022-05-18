@@ -104,14 +104,7 @@ export default function ItemPanel(props) {
     clearCheckboxes();
   }
 
-  // name: String,
-  // tags: Array,
-  // collectionId: String,
-  // added: Date,
-  // rest: Map
-
   const labels = [dictionary.name[ctxLang.language], `${dictionary.tags[ctxLang.language]} (${dictionary.commasep[ctxLang.language]})`]
-  if (items.length > 0) Object.keys(items[0].rest).forEach(e => labels.push(e))
   const labelsHTML = labels.map(e => <th>{e}</th>)
   const itemsData = items.map(e => <Item key={e._id} id={e._id} name={e.name} tags={e.tags} rest={e.rest} editable={editable} added={e.added.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedItems} />)
 
@@ -139,7 +132,7 @@ export default function ItemPanel(props) {
           <tbody>
             {itemsData}
             {addNew ? <ItemInput clickFunction={addCollection} collectionId={id} itemData={{}} /> : ""}
-            {editOn ? <ItemInput clickFunction={editCollection} collectionId={id} itemData={itemToEdit[0] ?? {}} /> : ""}
+            {editOn ? <ItemInput clickFunction={editCollection} collectionId={id} itemData={itemToEdit.at(-1) ?? {}} /> : ""}
           </tbody>
         </table>)}
     </div>

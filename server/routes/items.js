@@ -24,19 +24,19 @@ router.route('/').post(async (req, res) => {
 
 router.route('/:itemId').get((req, res) => {
     Item.findOne({
-        itemId: req.params.itemId
+        _id: req.params.itemId
     }).then(u => res.json(u)).catch(err => res.status(400).json(`Error: ${err}`))
 })
 
 router.route('/:itemId').delete((req, res) => {
     Item.deleteOne({
-        itemId: req.params.itemId
+        _id: req.params.itemId
     }).then(() => res.json('Deleted!')).catch(err => res.status(400).json(`Error: ${err}`))
 })
 
 router.route('/:itemId').patch((req, res) => {
     Item.updateOne({
-            itemId: req.params.itemId
+            _id: req.params.itemId
         }, {
             $set: req.body
         })

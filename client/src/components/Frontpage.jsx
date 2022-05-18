@@ -15,7 +15,7 @@ export default function Frontpage() {
     return (
         <main className="container">
             <div className="Main__jumbotron mt-5 mb-5">
-                <h1 className="Main__title">{dictionary.welcome[language]} <span className="Main__title-name fw-bolder fst-italic">GarbageCollector.js</span> !</h1>
+                <h1 className="Main__title">{dictionary.welcome[language]} <span className="Main__title-name fw-bolder fst-italic">GarbageCollector.js</span></h1>
             </div>
             <div className="Main__content lead">
                 {dictionary.content[language].map(c => <p>{c}</p>)}

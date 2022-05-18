@@ -36,7 +36,6 @@ export default function CollectionInput(props) {
       <td><input type="text" className="text-center border border-primary rounded" value={nameValue} onChange={handleNameChange} placeholder={dictionary.name[ctxLang.language]} /></td>
       <td><input type="text" className="text-center border border-primary rounded" value={topicValue} onChange={handleTopicChange} placeholder={dictionary.topic[ctxLang.language]} /></td>
       <td><input type="text" className="text-center border border-primary rounded" value={descriptionValue} onChange={handleDescriptionChange} placeholder={dictionary.desc[ctxLang.language]} /></td>
-      <td>{created ?? ""}</td>
       <td>{items ?? ""}</td>
       <td><button className="button btn btn-success button rounded" onClick={handleClick}>{id ? dictionary.edit[ctxLang.language] : dictionary.add[ctxLang.language]}!</button></td>
     </tr>

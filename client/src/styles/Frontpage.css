@@ -1,5 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap');
+
 .Main__title-name {
     color: #131313;
     letter-spacing: .1em;
+    font-weight: 900;
     text-shadow: 1px -1px #767676;
+    font-family: 'Roboto Slab', serif;
   }
