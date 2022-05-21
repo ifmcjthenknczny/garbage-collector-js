@@ -50,13 +50,6 @@ router.route('/:itemId/comments').get((req, res) => {
     }).then(u => res.json(u)).catch(err => res.status(400).json(`Error: ${err}`))
 })
 
-router.route('/latest').get(async (req, res) => {
-    const collections = await Item.find({})
-    const sortedCollections = Object.values(collections).sort((a, b) => b[added.getTime()] - a[added.getTime()]);
-    console.log(sortedCollections);
-    return res.status(200).json(sortedCollections.slice(0, 5));
-})
-
 router.route('/:id/like').patch((req, res) => {
     Item.updateOne({
             _id: req.params.id

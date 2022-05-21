@@ -6,18 +6,21 @@ import '../styles/CollectionInput.css'
 export default function CollectionInput(props) {
   const { username: author, clickFunction } = props;
   const { _id: id, name, topic, description, created, items } = props.collectionData
+  const topicList = ['beer', 'painting', 'minerals', 'watch', 'game', 'book', 'vinyl', 'camera']
   const ctxLang = useContext(LangContext)
-  const [nameValue, setNameValue] = useState(name ? name : undefined);
-  const [topicValue, setTopicValue] = useState(topic ? topic : undefined);
-  const [descriptionValue, setDescriptionValue] = useState(description ? description : undefined);
-  
+  const [nameValue, setNameValue] = useState(name ? name : '');
+  const [topicValue, setTopicValue] = useState(topic ? topic : topicList.sort((a, b) => dictionary[a][ctxLang.language] < dictionary[b][ctxLang.language] ? -1 : 1)[0]);
+  const [descriptionValue, setDescriptionValue] = useState(description ? description : '');
+  const [buttonBlock, setButtonBlock] = useState(false)
+
   const handleChange = (evt, func) => func(evt.target.value)
   const handleNameChange = (evt) => handleChange(evt, setNameValue)
   const handleTopicChange = (evt) => handleChange(evt, setTopicValue)
   const handleDescriptionChange = (evt) => handleChange(evt, setDescriptionValue)
 
   const handleClick = () => {
-    if ([nameValue, descriptionValue, topicValue].includes("")) return
+    if ([nameValue, descriptionValue, topicValue].includes("") || buttonBlock) return
+    setButtonBlock(true)
     const body = {
       "name": nameValue,
       "description": descriptionValue,
@@ -25,16 +28,17 @@ export default function CollectionInput(props) {
       "author": author
     }
     clickFunction(body)
+    setButtonBlock(false)
   }
-
-  // działająca data
-  // new Date(created).toLocaleString(ctxLang.language)
 
   return (
     <tr className="Collection text-center">
       <td></td>
       <td><input type="text" className="text-center border border-primary rounded" value={nameValue} onChange={handleNameChange} placeholder={dictionary.name[ctxLang.language]} /></td>
-      <td><input type="text" className="text-center border border-primary rounded" value={topicValue} onChange={handleTopicChange} placeholder={dictionary.topic[ctxLang.language]} /></td>
+      {/* <td><select id="topic" onChange={handleTopicChange}>{topicList.map(t => <option className="text-center" key={t} value={t}>{dictionary[t][ctxLang.language]}</option>)}
+      </select></td> */}
+      <td><select id="topic" onChange={handleTopicChange}>{topicList.sort((a,b) => dictionary[a][ctxLang.language] < dictionary[b][ctxLang.language] ? -1 : 1).map(topic => <option className="text-center" key={topic} value={topic}>{dictionary[topic][ctxLang.language]}</option>)}
+      </select></td>
       <td><input type="text" className="text-center border border-primary rounded" value={descriptionValue} onChange={handleDescriptionChange} placeholder={dictionary.desc[ctxLang.language]} /></td>
       <td>{items ?? ""}</td>
       <td><button className="button btn btn-success button rounded" onClick={handleClick}>{id ? dictionary.edit[ctxLang.language] : dictionary.add[ctxLang.language]}!</button></td>

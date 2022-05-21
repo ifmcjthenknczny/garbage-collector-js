@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap');
+
+.Tagcloud__tags {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.Link--tagcloud {
+    color: black;
+    text-decoration: none;
+}
+
+.dark-theme .Link--tagcloud {
+    color: white;
+}
+
+.dark-theme .Link--tagcloud:hover {
+    color: #0d6efd;
+}

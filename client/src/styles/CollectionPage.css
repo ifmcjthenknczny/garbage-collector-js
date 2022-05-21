@@ -1,3 +1,18 @@
 .fa-images:hover {
     color: green;
 }
+
+.CollectionPage__name {
+    font-weight: 600;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+@media only screen and (min-width: 575px) {
+    img {
+        max-width: 40vw !important;
+        max-height: 40vh !important;
+    }
+}

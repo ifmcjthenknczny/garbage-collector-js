@@ -1,11 +1,20 @@
 import '../styles/App.css';
-import Page from './Page'
+import Main from './Main.jsx'
+import { AuthContextProvider } from '../context/auth-context'
+import { LangContextProvider } from '../context/lang-context'
+import { ThemeContextProvider } from '../context/theme-context'
 
 function App() {
   return (
-      <div className="App">
-        <Page />
-      </div>
+    <div className="App">
+      <ThemeContextProvider>
+        <LangContextProvider>
+          <AuthContextProvider>
+            <Main />
+          </AuthContextProvider>
+        </LangContextProvider>
+      </ThemeContextProvider>
+    </div>
   );
 }
 

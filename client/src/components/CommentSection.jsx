@@ -16,7 +16,7 @@ export default function CommentSection(props) {
 
   useEffect(() => {
     fetchComments();
-    setInterval(() => fetchComments(), 5000)
+    setInterval(() => fetchComments(), 4000)
     // return clearInterval(commentRefresh)
   }, [])
 

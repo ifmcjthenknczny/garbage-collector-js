@@ -173,7 +173,7 @@ const dictionary = {
     },
     size: {
         en: "Size",
-        pl: "Przedmioty"
+        pl: "Rozmiar"
     },
     desc: {
         en: "Description",
@@ -252,12 +252,12 @@ const dictionary = {
         pl: 'Żaden użytkownik jeszcze nie polubił tego przedmiotu. Bądź pierwszy!'
     },
     onelike: {
-        en: 'One user like this item so far',
-        pl: "Dopiero jeden użytkownik polubił ten przedmiot"
+        en: 'One user like this item so far.',
+        pl: "Dopiero jeden użytkownik lubi ten przedmiot."
     },
     morelikes: {
-        en: "users like this item",
-        pl: "użytowników lubi ten przedmiot"
+        en: "users like this item!",
+        pl: "użytowników lubi ten przedmiot!"
     },
     byuser: {
         en: "by user",
@@ -293,23 +293,19 @@ const dictionary = {
     },
     loggedas: {
         en: "logged as",
-        pl: "zalogowano jako"
+        pl: "zalogowany użytkownik:"
     },
     dontlikeit: {
         en: "I don't like it anymore",
         pl: "Już nie lubię tego"
     },
-    loading: {
-        en: "Loading...",
-        pl: "Ładowanie..."
-    },
     propname: {
         en: "property name",
-        pl: "nazwa właściwości"
+        pl: "nazwa"
     },
     propval: {
         en: "property value",
-        pl: "wartość właściwości"
+        pl: "wartość"
     },
     confirm: {
         en: "confirm",
@@ -326,7 +322,49 @@ const dictionary = {
     home: {
         en: "home",
         pl: "do domu"
-    }
+    },
+    beer: {
+        en: "beers",
+        pl: "piwo"
+    },
+    painting: {
+        en: "paintings",
+        pl: "obrazy"
+    },
+    minerals: {
+        en: "minerals",
+        pl: "kamienie"
+    },
+    watch: {
+        en: "watches",
+        pl: "zegarki"
+    },
+    game: {
+        en: "games",
+        pl: "gry"
+    },
+    book: {
+        en: "books",
+        pl: "książki"
+    },
+    vinyl: {
+        en: "vinyls",
+        pl: "winyle"
+    },
+    camera: {
+        en: "cameras",
+        pl: "aparaty"
+    },
+    enterfilter: {
+        en: "Enter filter...",
+        pl: "Wpisz filtr..."
+    },
+    clearfilter: {
+        en: "Clear filter",
+        pl: "Wyczyść filtr"
+    },
 }
+
+// const topicList = ['beer', 'painting', 'minerals', 'watch', 'game', 'book', 'vinyl', 'camera']
 
 export default dictionary;

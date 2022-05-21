@@ -23,7 +23,7 @@
     -webkit-text-fill-color: transparent;
 }
 
-.Link {
+.Link--error {
     text-decoration: none;
     background: -webkit-linear-gradient(91deg, lightblue, violet);
     -webkit-background-clip: text;

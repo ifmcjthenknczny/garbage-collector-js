@@ -20,4 +20,8 @@ button {
 .Link {
   text-decoration: none;
 }
+
+body {
+  height: 100vh;
+}
 /*# sourceMappingURL=Main.css.map */

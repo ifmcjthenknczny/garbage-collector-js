@@ -26,11 +26,12 @@ export default function Login(props) {
 
     const handleClick = async (evt) => {
         evt.preventDefault();
-        if (username.trim().length === 0) {
+        let usernameLowerCase = username.toLowerCase()
+        if (usernameLowerCase.trim().length === 0) {
             setAlert(dictionary.enteruser[ctxLang.language])
             return
         }
-        if (username.includes('@') || username.includes(" ")) {
+        if (usernameLowerCase.includes('@') || usernameLowerCase.includes(" ")) {
             setAlert(dictionary.charnotallowed[ctxLang.language])
             return
         }
@@ -44,7 +45,7 @@ export default function Login(props) {
         }
 
         let exists = false;
-        await axios.get(`${DB_HOST}/api/users/${username}`).then((res) => { if (!!res.data) { exists = true; } })
+        await axios.get(`${DB_HOST}/api/users/${usernameLowerCase}`).then((res) => { if (!!res.data) { exists = true; } })
         // await axios.get(`${DB_HOST}/api/users/${mail}`, {}).then((res) => { if (!!res.data) { exists = true; setAlert(dictionary.userexists[ctxLang.language]) } })
         if (!loginWindow && exists) { setAlert(dictionary.userexists[ctxLang.language]); return; }
         else if (loginWindow && !exists) { setAlert(dictionary.usernotexists[ctxLang.language]); return; }
@@ -52,7 +53,7 @@ export default function Login(props) {
 
         if (!loginWindow) {
             const user = {
-                username: username,
+                username: usernameLowerCase,
                 email: mail,
                 lastLogin: null,
                 registrationTime: Date.now(),
@@ -61,13 +62,13 @@ export default function Login(props) {
                 password: password
             }
             await axios.post(`${DB_HOST}/api/users/`, user);
-            setAlert(`${dictionary.successreg[ctxLang.language]}${username}!`)
+            setAlert(`${dictionary.successreg[ctxLang.language]}${usernameLowerCase}!`)
             navigateAddress = '/login'
         } else {
             let dbPass = '';
             let isActive = true;
             let isAdmin = false;
-            await axios.get(`${DB_HOST}/api/users/${username}`).then(res => { dbPass = res.data.password; isActive = res.data.isActive; isAdmin = res.data.isAdmin })
+            await axios.get(`${DB_HOST}/api/users/${usernameLowerCase}`).then(res => { dbPass = res.data.password; isActive = res.data.isActive; isAdmin = res.data.isAdmin })
             if (!isActive) {
                 setAlert(dictionary.userblock[ctxLang.language])
                 return
@@ -77,10 +78,10 @@ export default function Login(props) {
                 setAlert(dictionary.userpassmatch[ctxLang.language])
                 return
             }
-            const loginUrl = `${DB_HOST}/api/users/${username}`;
+            const loginUrl = `${DB_HOST}/api/users/${usernameLowerCase}`;
             await axios.patch(loginUrl, { lastLogin: Date.now() });
-            ctxAuth.onLogin(username);
-            navigateAddress = `/user/${username}`
+            ctxAuth.onLogin(usernameLowerCase);
+            navigateAddress = `/user/${usernameLowerCase}`
         }
         // setTimeout(navigate(navigateAddress), 2000)
         navigate(-1)

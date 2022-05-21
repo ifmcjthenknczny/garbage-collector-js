@@ -11,17 +11,25 @@ import ItemInput from './ItemInput';
 export default function ItemPanel(props) {
   const { editable, collectionId: id } = props;
 
-  useEffect(() => {
-    fetchItems();
-  }, [])
-
   const [checkedItems, setCheckedItems] = useState([]);
   const [items, setItems] = useState([])
   const [loaded, setLoaded] = useState(false)
   const [addNew, setAddNew] = useState(false)
   const [editOn, setEditOn] = useState(false)
+  const [filter, setFilter] = useState('')
+  const [filterVisibility, setFilterVisibility] = useState(false)
+  const [itemsAlpha, setItemsAlpha] = useState(undefined)
   const [itemToEdit, setItemToEdit] = useState({});
   const ctxLang = useContext(LangContext);
+
+  useEffect(() => {
+    fetchItems();
+  }, [])
+
+  useEffect(() => {
+    setItems(prev => prev.filter(item => item.name.includes(filter) || item.tags.some(e => e.includes(filter))));
+    clearCheckboxes();
+  }, [filter])
 
   const clearCheckboxes = () => {
     setCheckedItems([])
@@ -43,6 +51,26 @@ export default function ItemPanel(props) {
     for (let checkbox of checkboxes) checkbox.checked = sourceState;
     if (sourceState) setCheckedItems([...items].map(u => u._id));
     else setCheckedItems([])
+  }
+
+  const handleSort = () => {
+    const itemsSorted = items.sort((a, b) => (a.name > b.name) ? 1 : -1)
+    if (itemsAlpha) {
+      setItems([...itemsSorted].reverse())
+      setItemsAlpha(false)
+    }
+    else {
+      setItems(itemsSorted)
+      setItemsAlpha(true)
+    }
+  }
+
+  const handleFilterInput = async (evt) => {
+    setFilter(evt.target.value)
+  }
+
+  const handleFilterClick = (evt) => {
+    setFilterVisibility(!filterVisibility)
   }
 
   const fetchItems = async () => {
@@ -75,6 +103,11 @@ export default function ItemPanel(props) {
     setAddNew(!addNew)
   }
 
+  const handleClickClearFilter = (evt) => {
+    setFilter('')
+    fetchItems()
+  }
+
   const handleClickEdit = async () => {
     if (checkedItems.length === 1 && !editOn) {
       setEditOn(true)
@@ -94,10 +127,10 @@ export default function ItemPanel(props) {
     let requests;
     if (request === 'DELETE') {
       requests = checkedItems.map(id => axios.delete(`${urlTemplateItems}/${id}`));
-      requests.push(axios.patch(`${urlTemplateCollections}/inc`,{change: -checkedItems.length}))
+      requests.push(axios.patch(`${urlTemplateCollections}/inc`, { change: -checkedItems.length }))
     }
     else if (request === 'ADD') {
-      requests = [axios.post(urlTemplateItems, body), axios.patch(`${urlTemplateCollections}/inc`,{change: 1})]
+      requests = [axios.post(urlTemplateItems, body), axios.patch(`${urlTemplateCollections}/inc`, { change: 1 })]
     }
     else if (request === 'EDIT') requests = [axios.patch(`${urlTemplateItems}/${itemToEdit.at(-1)._id}`, body)]
     await Promise.all(requests);
@@ -106,19 +139,20 @@ export default function ItemPanel(props) {
 
   const labels = [dictionary.name[ctxLang.language], `${dictionary.tags[ctxLang.language]} (${dictionary.commasep[ctxLang.language]})`]
   const labelsHTML = labels.map(e => <th>{e}</th>)
-  const itemsData = items.map(e => <Item key={e._id} id={e._id} name={e.name} tags={e.tags} rest={e.rest} editable={editable} added={e.added.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedItems} />)
 
   return (
     <div className="ItemPanel d-flex flex-column mt-4 justify-content-center align-items-center">
       <span className="fs-1 mb-3 fw-bold">{dictionary.items[ctxLang.language]}:</span>
       <div className="buttons ItemPanel__toolbox d-flex justify-content-around align-content-center mb-4 align-self-center">
-        {editable ? <>
-          <PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClickAdd} />
-          {items.length > 0 ? <><PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteCollections} />
-            <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleClickEdit} />
-        <PanelButton text={dictionary.sort[ctxLang.language]} className="fa-solid fa-arrow-down-a-z fs-3" onClick={() => { }} />
-        <PanelButton text={dictionary.filter[ctxLang.language]} className="fa-solid fa-filter fs-3" onClick={() => { }} /></> : ""}
-        </> : ""}
+        {editable ? <PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClickAdd} /> : ""}
+        {editable && items.length > 0 ? <><PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteCollections} />
+          <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleClickEdit} /></> : ""}
+        <PanelButton text={dictionary.sort[ctxLang.language]} className="fa-solid fa-arrow-down-a-z fs-3" onClick={handleSort} />
+        <PanelButton text={dictionary.filter[ctxLang.language]} className="fa-solid fa-filter fs-3" onClick={handleFilterClick} />
+      </div>
+      <div className="ItemPanel__filter d-flex flex-row">
+        <input type={filterVisibility ? "text" : "hidden"} value={filter} onChange={handleFilterInput} placeholder={dictionary.enterfilter[ctxLang.language]} />
+        {filterVisibility ? <button className="btn btn-secondary ms-3" onClick={handleClickClearFilter}>{dictionary.clearfilter[ctxLang.language]}</button> : ""}
       </div>
 
       {items.length === 0 && !addNew && !editOn ? <h3 className="ItemPanel text-center mt-4">{dictionary.noitems[ctxLang.language]}</h3> : (
@@ -130,9 +164,9 @@ export default function ItemPanel(props) {
             {labelsHTML}
           </tr></thead>
           <tbody>
-            {itemsData}
+            {items.map(e => <Item key={e._id} id={e._id} name={e.name} tags={e.tags} rest={e.rest} editable={editable} added={e.added.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedItems} />)}
             {addNew ? <ItemInput clickFunction={addCollection} collectionId={id} itemData={{}} /> : ""}
-            {editOn ? <ItemInput clickFunction={editCollection} collectionId={id} itemData={itemToEdit.at(-1) ?? {}} /> : ""}
+            {editOn ? <ItemInput clickFunction={editCollection} collectionId={id} itemData={itemToEdit[0] ?? {}} /> : ""}
           </tbody>
         </table>)}
     </div>

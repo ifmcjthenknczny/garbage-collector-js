@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import DB_HOST from "../DB_HOST"
 import Button from './Button'
+import LoadingSpinner from './LoadingSpinner'
 
 export default function UserPage() {
   const params = useParams();
@@ -32,15 +33,15 @@ export default function UserPage() {
   const editable = username === ctxAuth.loggedUser || ctxAuth.isAdmin
 
   const fetchUserData = async () => {
-    const userData = await axios.get(`${DB_HOST}/api/users/${username}`);
+    const userData = await axios.get(`${DB_HOST}/api/users/${username}`).catch(err => navigate('/error'));
     setUserData(userData.data);
     setLoaded(true)
   }
 
   return (
     <div className="UserPage container text-center d-flex flex-column align-items-center">
-      {/* {!loaded ? "" : <i className="fa-solid fa-spinner fs-2"></i>} */}
-      <div className="UserPage__header d-flex flex-row justify-content-center text-center align-items-center">
+      {!loaded ? <LoadingSpinner /> : (<>
+      <div className="UserPage__header d-flex flex-row justify-content-center text-center align-items-center mt-4">
         <h3 className="UserPage__username me-2">{username}</h3>
         <h4 className="UserPage__id">#{_id}</h4>
         </div>
@@ -53,7 +54,7 @@ export default function UserPage() {
         <h6 className="UserPage__lastLogin">{dictionary.lastlogin[ctxLang.language]}: {lastLogin}</h6>
         </div> 
       <CollectionPanel editable={editable} username={username} />
-      <Button classname="mt-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
+      <Button classname="mt-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} /></>)}
     </div>
   )
 }

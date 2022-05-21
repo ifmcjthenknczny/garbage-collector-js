@@ -8,6 +8,7 @@ export default function ItemInput(props) {
     const { startName, startValue, clickFunction, edited } = props;
     const [propertyName, setPropertyName] = useState(startName ? startName : "");
     const [propertyValue, setPropertyValue] = useState(startValue ? startValue : "");
+    const [buttonBlock, setButtonBlock] = useState(false)
     const ctxLang = useContext(LangContext)
 
     const handleChange = (evt, func) => func(evt.target.value)
@@ -15,11 +16,13 @@ export default function ItemInput(props) {
     const handleValueChange = (evt) => handleChange(evt, setPropertyValue)
 
     const handleClick = () => {
-        if ([propertyName, propertyValue].includes("")) return
+        if ([propertyName, propertyValue].includes("") || buttonBlock) return
+        setButtonBlock(true)
         let body = {};
         body[propertyName] = propertyValue;
         clickFunction(body, edited ? 'edit' : 'add')
         clearInput()
+        setButtonBlock(false)
     }
 
     const clearInput = () => {

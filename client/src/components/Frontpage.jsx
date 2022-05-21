@@ -3,28 +3,33 @@ import dictionary from '../content';
 import Bestlist from './Bestlist'
 import '../styles/Frontpage.css'
 import LangContext from '../context/lang-context';
+import ThemeContext from '../context/theme-context';
 import Tagcloud from './Tagcloud';
-import DB_HOST from '../DB_HOST'
+import DB_HOST from '../DB_HOST';
+import jumbotron from "../images/jumbotron.jpg"
 
-export default function Frontpage() {
+export default function Frontpage(props) {
     const ctxLang = useContext(LangContext);
+    const themeClassName = useContext(ThemeContext).isDarkMode ? "dark-theme" : ""
     const { language } = ctxLang;
-    const apiLinkCollections = `${DB_HOST}/api/collections/biggest`
-    const apiLinkItems = `${DB_HOST}/api/items/latest`
+    const apiLinkCollections = `${DB_HOST}/api/biggest-collections`
+    const apiLinkItems = `${DB_HOST}/api/latest-items`
 
     return (
-        <main className="container">
-            <div className="Main__jumbotron mt-5 mb-5">
-                <h1 className="Main__title">{dictionary.welcome[language]} <span className="Main__title-name fw-bolder fst-italic">GarbageCollector.js</span></h1>
-            </div>
-            <div className="Main__content lead">
+        <main className="container Frontpage">
+            <header className={"Frontpage__header mt-4 mb-5 d-flex flex-column ".concat(props.theme)}>
+                <h4 className="Frontpage__welcome">{dictionary.welcome[language]}</h4>
+                <h1 className="Frontpage__name fw-bolder">GarbageCollector.js</h1>
+            </header>
+            <img src={jumbotron} className="img-fluid Frontpage__image" alt="Jumbotron" />
+            <div className="Frontpage__content lead mt-5">
                 {dictionary.content[language].map(c => <p>{c}</p>)}
             </div>
-            <div className="Main__attention-bar d-flex justify-content-around mt-5">
-                {/* <Bestlist header={dictionary.largest[language]} topValueName="items" apiLink={apiLinkCollections} /> */}
-                {/* <Bestlist header={dictionary.latest[language]} bottomValueName="added" apiLink={apiLinkItems} /> */}
+            <div className="Frontpage__attention-bar mt-5 row">
+                <Bestlist header={dictionary.largest[language]} topValueName="items" bottomValueName="author" apiLink={apiLinkCollections} elementLinkTemplate="/collection/" classes="col-4" />
+                <Tagcloud classes="col-4" />
+                <Bestlist header={dictionary.latest[language]} bottomValueName="added" apiLink={apiLinkItems} elementLinkTemplate="/item/" classes={"col-4 ".concat(themeClassName)} />
             </div>
-            <Tagcloud />
         </main>
     )
 }

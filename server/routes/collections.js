@@ -1,12 +1,46 @@
 import express from 'express';
 import Collection from '../models/collection.model.js';
 import Item from '../models/item.model.js'
+import multer from 'multer'
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, `build/uploads/`)
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}.${file.originalname.split('.').at(-1)}`)
+    }
+})
+
+const fileFilter = (req, file, cb) => {
+    if (['image/jpeg', 'image/png'].includes(file.mimetype)) cb(null, true)
+    else cb(null, false)
+}
+
+const upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        filesize: 1024 * 1024 * 5
+    },
+    preservePath: true
+})
 
 router.route('/').get((req, res) => {
     Collection.find().then(users => res.json(users)).catch(err => res.status(400).json(`Error: ${err}`));
 })
+
+router.post('/imageupload', upload.single('file'), (req, res, next) => {
+    return res.json({
+        image: req.file.filename
+    })
+})
+
+// router.route('/imageupload', upload.single('file')).post((req, res, next) => {
+//     return res.json({image: req.file.filename})
+// })
 
 router.route('/:id').get((req, res) => {
     Collection.findOne({
@@ -15,7 +49,15 @@ router.route('/:id').get((req, res) => {
 })
 
 router.route('/').post(async (req, res) => {
-    const {name, description, topic, imageLink = "", author, items = 0, created = Date.now()} = req.body;
+    const {
+        name,
+        description,
+        topic,
+        imageLink = "",
+        author,
+        items = 0,
+        created = Date.now()
+    } = req.body;
     const newCollection = new Collection({
         name,
         description,
@@ -61,12 +103,6 @@ router.route('/:id/items').get((req, res) => {
     Item.find({
         collectionId: req.params.id
     }).then(u => res.json(u)).catch(err => res.status(400).json(`Error: ${err}`))
-})
-
-router.route('/biggest').get(async (req, res) => {
-    const collections = await Collection.find({})
-    const sortedCollections = Object.values(collections).sort((a, b) => b.items - a.items);
-    return res.status(200).json(sortedCollections.slice(0, 5));
 })
 
 export default router

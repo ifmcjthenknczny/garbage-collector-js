@@ -36,7 +36,7 @@ export default function ItemPage() {
 
     const fetchItemData = async () => {
         setLoaded(false)
-        const iData = await axios.get(`${DB_HOST}/api/items/${id}`);
+        const iData = await axios.get(`${DB_HOST}/api/items/${id}`).catch(err => navigate('/error'))
         const { collectionId } = iData.data
         const collectionData = await axios.get(`${DB_HOST}/api/collections/${collectionId}`);
         let newState = { ...iData.data, collectionName: collectionData.data.name, author: collectionData.data.author }
@@ -75,8 +75,7 @@ export default function ItemPage() {
 
     return (
         <div className="ItemPage d-flex flex-column align-items-center">
-            {/* {!loaded ? <LoadingSpinner /> : ""} */}
-            <div className="ItemPage__header">
+            {!loaded ? <LoadingSpinner /> : (<><div className="ItemPage__header mt-4">
                 <h3 className="ItemPage__name">{name}</h3>
                 <h5 className="ItemPage__ownership">{dictionary.itemof[ctxLang.language]} <Link className="Link" to={"/collection/".concat(collectionId)}>{collectionName}</Link> {dictionary.byuser[ctxLang.language]} <Link className="Link" to={"/user/".concat(author)}>{author}</Link></h5>
             </div>
@@ -93,7 +92,7 @@ export default function ItemPage() {
             </table>
 
             <Button className="mt-5 mb-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
-            <CommentSection itemId={id} />
+            <CommentSection itemId={id} /></>)}
         </div>
     )
 

@@ -8,6 +8,7 @@ import DB_HOST from '../DB_HOST'
 import PanelButton from './PanelButton'
 import dictionary from '../content';
 import LangContext from '../context/lang-context';
+import LoadingSpinner from './LoadingSpinner'
 
 export default function Admin(props) {
     useEffect(() => {
@@ -17,6 +18,7 @@ export default function Admin(props) {
 
     const [checkedUsers, setCheckedUsers] = useState([]);
     const [users, setUsers] = useState([])
+    const [loaded, setLoaded] = useState(false)
     let navigate = useNavigate();
     const ctxAuth = useContext(AuthContext);
     const ctxLang = useContext(LangContext);
@@ -54,6 +56,7 @@ export default function Admin(props) {
     const loadData = async () => {
         const data = await axios.get(`${DB_HOST}/api/users`);
         setUsers(data.data);
+        setLoaded(true)
     }
 
     const deleteUsers = async () => {
@@ -99,7 +102,7 @@ export default function Admin(props) {
 
     return (
         <div className={"Admin d-flex flex-column mt-4 justify-content-center ".concat(theme)}>
-            <span className="fs-1 mb-2 fw-bold mb-4">{dictionary.adminPanel[ctxLang.language]}</span>
+            {!loaded ? <LoadingSpinner /> : (<><span className="fs-1 mb-2 fw-bold mb-4">{dictionary.adminPanel[ctxLang.language]}</span>
             <div className="buttons d-flex justify-content-around align-content-center mb-4 align-self-center">
                 {/* <i className="fa-solid fa-eye fs-3"><span className="fs-6 info">View</span></i> */}
                 <PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteUsers} />
@@ -116,7 +119,7 @@ export default function Admin(props) {
                     {labelsHTML}
                 </tr></thead>
                 <tbody>{usersData}</tbody>
-            </table>
+            </table></>)}
         </div>
     )
 }
