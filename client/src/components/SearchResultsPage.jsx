@@ -1,36 +1,38 @@
 import React, { useContext, useEffect, useState } from 'react'
 import LangContext from '../context/lang-context'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
 import dictionary from '../content'
 import DB_HOST from '../DB_HOST'
+import SearchResult from './SearchResult'
 
 export default function SearchResultsPage() {
-  const ctxLang = useContext(LangContext);
   const params = useParams()
   const { query } = params;
-
   const [searchResults, setSearchResults] = useState([])
   const [loaded, setLoaded] = useState(false)
+  const ctxLang = useContext(LangContext);
 
   useEffect(() => {
     getSearchResults();
   }, [query])
 
   const getSearchResults = async () => {
+    setLoaded(false)
     const url = `${DB_HOST}/api/search/${query}`
-    console.log(url)
     const fetchedResults = await axios.get(url)
     setSearchResults(fetchedResults.data)
     setLoaded(true)
   }
 
   return (
-    <section className="SearchResultsPage d-flex flex-column">
+    <section className="SearchResultsPage">
       {!loaded ? <LoadingSpinner /> : (
         <>
-          {searchResults.length !== 0 ? (<><h2 className="SearchResultsPage__success mt-3 mb-4">{dictionary.searchres[ctxLang.language]}:</h2>{searchResults.map(e => <div key={e._id} className="SearchResultsPage__result p-3 m-3 border-1 rounded bg-primary text-white"><Link className="Link--search" to={"/item/".concat(e._id)}>{e.name}</Link></div>)}</>) : <h2 className="SearchResultsPage__error mt-3 mb-4">{dictionary.noresults[ctxLang.language]}</h2>}
+          {searchResults.length !== 0 ? (<>
+            <h5 className="SearchResultsPage__success mt-4 text-decoration-underline">{dictionary.searchres[ctxLang.language]} "{query.replaceAll("+", " ")}":</h5>
+            {searchResults.map(e => <SearchResult key={e._id} id={e._id} name={e.name} score={e.score} />)}</>) : <h2 className="SearchResultsPage__error mt-3 mb-4 text-decoration-underline">{dictionary.noresults[ctxLang.language]} "{query.replaceAll("+", " ")}".</h2>}
         </>
       )}
     </section>

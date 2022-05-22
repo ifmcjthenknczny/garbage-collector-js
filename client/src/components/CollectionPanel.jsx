@@ -10,18 +10,16 @@ import CollectionInput from './CollectionInput';
 
 export default function CollectionPanel(props) {
     const { editable, username } = props;
-
-    useEffect(() => {
-        fetchCollections();
-    }, [username])
-
     const [checkedCollections, setCheckedCollections] = useState([]);
     const [collections, setCollections] = useState([])
-    const [loaded, setLoaded] = useState(false)
     const [addNew, setAddNew] = useState(false)
     const [editOn, setEditOn] = useState(false)
     const [collectionToEdit, setCollectionToEdit] = useState({});
     const ctxLang = useContext(LangContext);
+
+    useEffect(() => {
+        fetchCollections();
+    }, [username])
 
     const clearCheckboxes = () => {
         setCheckedCollections([])
@@ -46,9 +44,7 @@ export default function CollectionPanel(props) {
     }
 
     const fetchCollections = async () => {
-        setLoaded(false)
         const data = await axios.get(`${DB_HOST}/api/users/${username}/collections`);
-        setLoaded(true)
         setCollections(data.data);
     }
 
@@ -106,13 +102,10 @@ export default function CollectionPanel(props) {
         <div className="CollectionPanel d-flex flex-column mt-4 justify-content-center align-items-center">
             <span className="fs-1 mb-3 fw-bold">{dictionary.usercoll[ctxLang.language]}:</span>
             {editable ? <div className="buttons CollectionPanel__toolbox d-flex justify-content-around align-content-center mb-4 align-self-center">
-
                 <PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClickAdd} />
                 {collections.length > 0 ? <><PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteCollections} />
                     <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleClickEdit} /></> : ""}
-
             </div> : ""}
-
             {collections.length === 0 && !addNew && !editOn ? <h3 className="CollectionPanel text-center mt-4">{dictionary.nocoll[ctxLang.language]}</h3> : (
                 <table className="CollectionPanel_table table">
                     <thead><tr>

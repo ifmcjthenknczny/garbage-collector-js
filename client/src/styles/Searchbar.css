@@ -1,5 +1,6 @@
 .fa-magnifying-glass {
     cursor: pointer;
+    height: 40px;
 }
 
 .fa-magnifying-glass:hover, .dark-theme .fa-magnifying-glass:hover {
@@ -11,8 +12,9 @@
     background-color: darkgray;
 }
 
-.Search {
-    width: clamp(200px, 30vw, 400px)
+.Searchbar {
+    width: clamp(200px, 30vw, 400px);
+    height: 40px;
 }
 
 @media only screen and (max-width: 575px) {

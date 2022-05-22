@@ -7,8 +7,8 @@ import LangContext from '../context/lang-context'
 import { Link } from 'react-router-dom'
 
 export default function Tagcloud(props) {
-  const [tags, setTags] = useState([])
   const { classes } = props;
+  const [tags, setTags] = useState([])
   const ctxLang = useContext(LangContext)
   useEffect(() => {
     getTags();
@@ -19,11 +19,12 @@ export default function Tagcloud(props) {
     const data = await axios.get(url)
     setTags(data.data)
   }
+
   return (
     <section className={"Tagcloud ".concat(classes)}>
       <h4 className="Tagcloud__title">{dictionary.tagcloud[ctxLang.language]}</h4>
       <div className="Tagcloud__tags">
-        {tags ? tags.map(t => <Link className="Link--tagcloud" to={"/search/".concat(t.trim().replaceAll(" ","+"))}>{t.concat(" ")}</Link>) : ""}
+        {tags ? tags.map(t => <Link key={t} className="Link--tagcloud" to={"/search/".concat(t.trim().replaceAll(" ", "+"))}>{t.concat(" ")}</Link>) : ""}
       </div>
     </section>
   )

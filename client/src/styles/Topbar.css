@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200&family=Roboto+Slab:wght@200;900&display=swap');
 
 button {
     width: 150px;
@@ -18,9 +18,9 @@ button {
 .Logo {
     color: #131313;
     letter-spacing: .15em;
-    font-weight: 900;
     text-shadow: 1px -1px #767676;
     font-family: 'Roboto Slab', serif;
+    font-weight: 900;
     cursor: pointer;
 }
 

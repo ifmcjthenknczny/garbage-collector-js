@@ -7,7 +7,6 @@ import ItemPanel from './ItemPanel';
 import axios from 'axios';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import DB_HOST from "../DB_HOST"
-import Button from './Button'
 import PanelButton from './PanelButton'
 import LoadingSpinner from './LoadingSpinner';
 import ReactMarkdown from 'react-markdown'
@@ -15,24 +14,24 @@ import gfm from 'remark-gfm';
 
 export default function CollectionPage() {
   const params = useParams();
-  const navigate = useNavigate();
-
+  const { collectionId: id } = params;
   const [collectionData, setCollectionData] = useState({})
   const [loaded, setLoaded] = useState(false)
+  const navigate = useNavigate();
   const ctxAuth = useContext(AuthContext);
   const ctxLang = useContext(LangContext);
-  const { collectionId: id } = params;
 
   useEffect(() => {
     fetchCollectionData();
   }, [id])
 
-  let { name, description, topic, imageLink, author, items, created } = collectionData;
+  let { name, description, topic, imageLink, author, created } = collectionData;
   created = new Date(created).toLocaleString(ctxLang.language)
   const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
 
   const fetchCollectionData = async () => {
-    const collectionData = await axios.get(`${DB_HOST}/api/collections/${id}`).catch(err => navigate('/error'));
+    const collectionData = await axios.get(`${DB_HOST}/api/collections/${id}`)
+    if (!collectionData.data) navigate('/error')
     setCollectionData(collectionData.data);
     setLoaded(true)
   }
@@ -63,10 +62,9 @@ export default function CollectionPage() {
         ) : ""}
         <h5 className="CollectionPage__topic mt-3">{dictionary[topic][ctxLang.language]}</h5>
         <h5 className="CollectionPage__created">{dictionary.createdtime[ctxLang.language]} {created}</h5>
-        <p className="CollectionPage__description"><ReactMarkdown remarkPlugins={[gfm]}>{description}</ReactMarkdown></p>
-
+        <h6 className="CollectionPage__description"><ReactMarkdown remarkPlugins={[gfm]}>{description}</ReactMarkdown></h6>
         <ItemPanel editable={editable} collectionId={id} />
-        </>)}
+      </>)}
     </div>
   )
 }

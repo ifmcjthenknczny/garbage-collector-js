@@ -3,6 +3,11 @@ import Comment from '../models/comment.model.js';
 
 const router = express.Router();
 
+router.route('/').get(async (req, res) => {
+    const comments = await Comment.find()
+    return res.status(200).json(comments)
+})
+
 router.route('/').post(async (req, res) => {
     const {itemId, author, content, timestamp = Date.now()} = req.body;
     const newComment = new Comment({
@@ -12,7 +17,7 @@ router.route('/').post(async (req, res) => {
         content
     });
     await newComment.save();
-    res.json(`New collection by ${author} added!`);
+    res.status(200).json(`New collection by ${author} added!`);
 });
 
 export default router

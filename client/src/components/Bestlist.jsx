@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import '../styles/Bestlist.css'
 import axios from 'axios'
 import ListElement from './ListElement'
 import ThemeContext from '../context/theme-context';

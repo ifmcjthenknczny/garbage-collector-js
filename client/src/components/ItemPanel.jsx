@@ -7,13 +7,12 @@ import dictionary from '../content'
 import LangContext from '../context/lang-context'
 import PanelButton from './PanelButton'
 import ItemInput from './ItemInput';
+import { nanoid } from 'nanoid'
 
 export default function ItemPanel(props) {
   const { editable, collectionId: id } = props;
-
   const [checkedItems, setCheckedItems] = useState([]);
   const [items, setItems] = useState([])
-  const [loaded, setLoaded] = useState(false)
   const [addNew, setAddNew] = useState(false)
   const [editOn, setEditOn] = useState(false)
   const [filter, setFilter] = useState('')
@@ -24,10 +23,10 @@ export default function ItemPanel(props) {
 
   useEffect(() => {
     fetchItems();
-  }, [])
+  }, [id])
 
   useEffect(() => {
-    setItems(prev => prev.filter(item => item.name.includes(filter) || item.tags.some(e => e.includes(filter))));
+    setItems(prev => prev.filter(item => item.name.toLowerCase().includes(filter.toLowerCase()) || item.tags.some(e => e.toLowerCase().includes(filter.toLowerCase()))));
     clearCheckboxes();
   }, [filter])
 
@@ -58,8 +57,7 @@ export default function ItemPanel(props) {
     if (itemsAlpha) {
       setItems([...itemsSorted].reverse())
       setItemsAlpha(false)
-    }
-    else {
+    } else {
       setItems(itemsSorted)
       setItemsAlpha(true)
     }
@@ -74,9 +72,7 @@ export default function ItemPanel(props) {
   }
 
   const fetchItems = async () => {
-    setLoaded(false)
     const data = await axios.get(`${DB_HOST}/api/collections/${id}/items`);
-    setLoaded(true)
     setItems(data.data);
   }
 
@@ -138,7 +134,6 @@ export default function ItemPanel(props) {
   }
 
   const labels = [dictionary.name[ctxLang.language], `${dictionary.tags[ctxLang.language]} (${dictionary.commasep[ctxLang.language]})`]
-  const labelsHTML = labels.map(e => <th>{e}</th>)
 
   return (
     <div className="ItemPanel d-flex flex-column mt-4 justify-content-center align-items-center">
@@ -150,18 +145,17 @@ export default function ItemPanel(props) {
         {items.length > 1 ? <><PanelButton text={dictionary.sort[ctxLang.language]} className="fa-solid fa-arrow-down-a-z fs-3" onClick={handleSort} />
           <PanelButton text={dictionary.filter[ctxLang.language]} className="fa-solid fa-filter fs-3" onClick={handleFilterClick} /></> : ""}
       </div>
-      <div className="ItemPanel__filter d-flex flex-row">
+      <div className="ItemPanel__filter d-flex flex-row mb-3">
         <input type={filterVisibility ? "text" : "hidden"} value={filter} onChange={handleFilterInput} placeholder={dictionary.enterfilter[ctxLang.language]} />
         {filterVisibility ? <button className="btn btn-secondary ms-3" onClick={handleClickClearFilter}>{dictionary.clearfilter[ctxLang.language]}</button> : ""}
       </div>
-
       {items.length === 0 && !addNew && !editOn ? <h3 className="ItemPanel text-center mt-4">{dictionary.noitems[ctxLang.language]}</h3> : (
         <table className="ItemPanel_table table">
           <thead><tr>
             {editable ? <th><div className="form-check">
               <input className="form-check-input main-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={selectAll} />
             </div></th> : ""}
-            {labelsHTML}
+            {labels.map(e => <th key={nanoid()}>{e}</th>)}
           </tr></thead>
           <tbody>
             {items.map(e => <Item key={e._id} id={e._id} name={e.name} tags={e.tags} rest={e.rest} editable={editable} added={e.added.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedItems} />)}

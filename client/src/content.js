@@ -368,12 +368,28 @@ const dictionary = {
         pl: "Strona domowa"
     },
     noresults: {
-        en: "There are no results for this query in database.",
-        pl: "Brak wyników dla tej frazy w bazie danych."
+        en: "There are no results in database for query",
+        pl: "Brak wyników w bazie danych dla zapytania"
     },
     searchres: {
-        en: "Search results",
-        pl: "Wyniki wyszukiwania"
+        en: "Search results for query",
+        pl: "Wyniki wyszukiwania dla zapytania"
+    },
+    score: {
+        en: "Fit",
+        pl: "Trafność"
+    },
+    email: {
+        en: "E-mail",
+        pl: "E-mail"
+    },
+    status: {
+        en: "Status",
+        pl: "Status"
+    },
+    admin: {
+        en: "Admin",
+        pl: "Admin"
     }
 }
 

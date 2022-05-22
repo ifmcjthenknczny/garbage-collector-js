@@ -28,10 +28,14 @@ router.route('/:itemId').get((req, res) => {
     }).then(u => res.json(u)).catch(err => res.status(400).json(`Error: ${err}`))
 })
 
-router.route('/:itemId').delete((req, res) => {
-    Item.deleteOne({
+router.route('/:itemId').delete(async (req, res) => {
+    await Item.deleteOne({
         _id: req.params.itemId
-    }).then(() => res.json('Deleted!')).catch(err => res.status(400).json(`Error: ${err}`))
+    })
+    await Comment.deleteMany({
+        itemId: req.params.itemId
+    })
+    return res.json('Deleted!')
 })
 
 router.route('/:itemId').patch((req, res) => {

@@ -1,6 +1,12 @@
 import express from 'express';
 import Item from '../models/item.model.js';
 import Collection from '../models/collection.model.js';
+import Comment from '../models/comment.model.js';
+import {
+    generateQuerySyntax,
+    generateProjectObject,
+    generateSearchResultObject
+} from '../helpers.js'
 
 const router = express.Router();
 
@@ -23,38 +29,39 @@ router.route('/tags').get(async (req, res) => {
 
 router.route('/search/:query').get(async (req, res) => {
     const query = req.params.query.replaceAll('+', ' ')
-    const searchRes = await Item.aggregate([{
-            $search: {
-                index: 'search',
-                text: {
-                    query: query,
-                    path: {
-                        wildcard: '*'
-                    }
-                }
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                name: 1,
-                collectionId: 1,
-                score: {
-                    $meta: 'searchScore'
-                },
-            },
-        },
-        {
-            $sort: {
-                score: -1
-            }
-        },
-        {
-            $limit: 10
-        }
-    ])
-    return res.status(200).json(searchRes)
-})
+    const searchResults = await Item.aggregate([generateQuerySyntax('search', query), generateProjectObject("name", "collectionId")])
+    const commentSearchResult = await Comment.aggregate([generateQuerySyntax('searchcomments', query), generateProjectObject("itemId")])
+    const collectionSearchResult = await Collection.aggregate([generateQuerySyntax('searchcollections', query), generateProjectObject()])
+    let checkedItems = {};
+    searchResults.forEach(r => checkedItems[r._id] = r.score);
 
+    for (let result of commentSearchResult) {
+        if (!checkedItems[result.itemId]) {
+            const itemFromComment = await Item.findOne({
+                _id: result.itemId
+            })
+            if (!itemFromComment) continue
+            searchResults.push(generateSearchResultObject(itemFromComment, result.score))
+            checkedItems[result.itemId] = result.score
+        } else if (checkedItems[result.itemId] < result.score) {
+            const index = searchResults.findIndex(obj => `${obj._id}` === `${result.itemId}`)
+            if (index !== -1) searchResults[index].score = result.score
+        }
+    }
+    for (let result of collectionSearchResult) {
+        const itemsFromCollectionSearch = await Item.find({
+            collectionId: result._id
+        })
+        for (let item of itemsFromCollectionSearch) {
+            if (!checkedItems[item._id]) {
+                searchResults.push(generateSearchResultObject(item, result.score))
+            } else if (checkedItems[item._id] < result.score) {
+                const index = searchResults.findIndex(obj => `${obj._id}` === `${item._id}`)
+                if (index !== -1) searchResults[index].score = result.score
+            }
+        }
+    }
+    return res.status(200).json(searchResults.sort((a, b) => b.score - a.score).slice(0, 10))
+})
 
 export default router

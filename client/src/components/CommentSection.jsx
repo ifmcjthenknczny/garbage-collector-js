@@ -11,14 +11,14 @@ export default function CommentSection(props) {
   const { itemId } = props;
   const [comments, setComments] = useState([])
   const [inputComment, setInputComment] = useState('')
+  const [buttonBlock, setButtonBlock] = useState(false)
   const ctxAuth = useContext(AuthContext)
   const ctxLang = useContext(LangContext)
 
   useEffect(() => {
     fetchComments();
     setInterval(() => fetchComments(), 4000)
-    // return clearInterval(commentRefresh)
-  }, [])
+  }, [itemId])
 
   const fetchComments = async () => {
     const url = `${DB_HOST}/api/items/${itemId}/comments`
@@ -31,7 +31,8 @@ export default function CommentSection(props) {
   }
 
   const addComment = async () => {
-    if (inputComment === '') return
+    if (inputComment === '' || buttonBlock) return
+    setButtonBlock(true)
     const url = `${DB_HOST}/api/comments`
     const body = {
       "author": ctxAuth.loggedUser,
@@ -40,13 +41,17 @@ export default function CommentSection(props) {
     }
     await axios.post(url, body)
     setInputComment('');
+    setTimeout(() => setButtonBlock(false), 2000)
   }
 
   return (
-    <section className="CommentSection d-flex flex-column align-items-center mt-5">
+    <section className="CommentSection d-flex flex-column align-items-center mt-5 mb-5">
       {ctxAuth.isLoggedIn ? <div className="CommentSection__addComment d-flex flex-row">
-        <textarea type="text" rows="5" cols="60" value={inputComment} onChange={handleChange} placeholder={dictionary.typecomm[ctxLang.language]} /> <Button onClick={addComment} content={dictionary.addcomm[ctxLang.language]} /> </div> : ""}
-      <div className="CommentSection__comments d-flex flex-column align-items-center">{comments.map(c => <Comment key={c._id} author={c.author} content={c.content} timestamp={c.timestamp} />)}</div>
+        <textarea type="text" rows="5" cols="60" value={inputComment} onChange={handleChange} placeholder={dictionary.typecomm[ctxLang.language]} />
+        <Button onClick={addComment} content={dictionary.addcomm[ctxLang.language]} /> </div> : ""}
+      <div className="CommentSection__comments d-flex flex-column align-items-center">
+        {comments.map(c => <Comment key={c._id} author={c.author} content={c.content} timestamp={c.timestamp} />)}
+      </div>
     </section>
   )
 }

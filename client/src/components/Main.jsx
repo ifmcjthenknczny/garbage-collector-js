@@ -13,7 +13,6 @@ import ItemPage from './ItemPage'
 import Error from './Error'
 import SearchResultsPage from './SearchResultsPage'
 import BackButton from './BackButton';
-import '../styles/SearchResultsPage.css'
 
 export default function Main(props) {
     const ctxTheme = useContext(ThemeContext);
@@ -25,8 +24,8 @@ export default function Main(props) {
             <div className="Main__content">
                 <Routes>
                     <Route path='/' element={<Frontpage theme={themeClassName} />} exact />
-                    <Route path='/login' element={<Login className="" theme={themeClassName} loginWindow={true} />} exact />
-                    <Route path='/register' element={<Login className="" theme={themeClassName} loginWindow={false} />} exact />
+                    <Route path='/login' element={<Login className="" theme={themeClassName} toLoginWindow={true} />} exact />
+                    <Route path='/register' element={<Login className="" theme={themeClassName} toLoginWindow={false} />} exact />
                     <Route path='/admin' element={<Admin theme={themeClassName} />} exact />
                     <Route path='/user/:username' element={<UserPage />} exact />
                     <Route path='/collection/:collectionId' element={<CollectionPage />} exact />

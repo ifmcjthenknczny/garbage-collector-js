@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import DB_HOST from '../DB_HOST'
 
 export default function Login(props) {
-    const { loginWindow } = props;
+    const { toLoginWindow } = props;
     const [username, setUsername] = useState('');
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,8 +21,10 @@ export default function Login(props) {
     const handleInputUsername = (evt) => setUsername(evt.target.value)
     const handleInputMail = (evt) => setMail(evt.target.value)
     const handleInputPassword = (evt) => setPassword(evt.target.value)
-
-    // połączyć obydwie funkcje w handleClick
+    
+    const handleFocus = (evt) => {
+        setAlert('');
+    }
 
     const handleClick = async (evt) => {
         evt.preventDefault();
@@ -35,7 +37,7 @@ export default function Login(props) {
             setAlert(dictionary.charnotallowed[ctxLang.language])
             return
         }
-        if (!validateEmail(mail) && !loginWindow) {
+        if (!validateEmail(mail) && !toLoginWindow) {
             setAlert(dictionary.validmail[ctxLang.language])
             return
         }
@@ -46,12 +48,10 @@ export default function Login(props) {
 
         let exists = false;
         await axios.get(`${DB_HOST}/api/users/${usernameLowerCase}`).then((res) => { if (!!res.data) { exists = true; } })
-        // await axios.get(`${DB_HOST}/api/users/${mail}`, {}).then((res) => { if (!!res.data) { exists = true; setAlert(dictionary.userexists[ctxLang.language]) } })
-        if (!loginWindow && exists) { setAlert(dictionary.userexists[ctxLang.language]); return; }
-        else if (loginWindow && !exists) { setAlert(dictionary.usernotexists[ctxLang.language]); return; }
-        let navigateAddress = '';
+        if (!toLoginWindow && exists) { setAlert(dictionary.userexists[ctxLang.language]); return; }
+        else if (toLoginWindow && !exists) { setAlert(dictionary.usernotexists[ctxLang.language]); return; }
 
-        if (!loginWindow) {
+        if (!toLoginWindow) {
             const user = {
                 username: usernameLowerCase,
                 email: mail,
@@ -63,7 +63,6 @@ export default function Login(props) {
             }
             await axios.post(`${DB_HOST}/api/users/`, user);
             setAlert(`${dictionary.successreg[ctxLang.language]}${usernameLowerCase}!`)
-            navigateAddress = '/login'
         } else {
             let dbPass = '';
             let isActive = true;
@@ -81,22 +80,16 @@ export default function Login(props) {
             const loginUrl = `${DB_HOST}/api/users/${usernameLowerCase}`;
             await axios.patch(loginUrl, { lastLogin: Date.now() });
             ctxAuth.onLogin(usernameLowerCase);
-            navigateAddress = `/user/${usernameLowerCase}`
+            navigate(-1)
         }
-        // setTimeout(navigate(navigateAddress), 2000)
-        navigate(-1)
-    }
-
-    const handleFocus = (evt) => {
-        setAlert('');
     }
 
     return (<div className="Login border rounded d-flex flex-column mt-2 p-2" >
         <input type="text" id="username" className="username" placeholder={dictionary.username[ctxLang.language]} onFocus={handleFocus} onInput={handleInputUsername} />
-        {!loginWindow ? <input type="text" id="email" className="email" placeholder={dictionary.mail[ctxLang.language]} onFocus={handleFocus} onInput={handleInputMail} /> : ''}
+        {!toLoginWindow ? <input type="text" id="email" className="email" placeholder={dictionary.mail[ctxLang.language]} onFocus={handleFocus} onInput={handleInputMail} /> : ''}
         <input type="password" id="password" className="password" placeholder={dictionary.password[ctxLang.language]} onFocus={handleFocus} onInput={handleInputPassword} />
         <button className="button__submit btn btn-dark rounded align-self-center mt-1" type="submit" onClick={handleClick}>
-            {loginWindow ? dictionary.logme[ctxLang.language] : dictionary.registerme[ctxLang.language]}!
+            {toLoginWindow ? dictionary.logme[ctxLang.language] : dictionary.registerme[ctxLang.language]}!
         </button>
         <span className="Login__alert fs-3 mb-2 mt-2">{alert}</span>
     </div>)

@@ -2,6 +2,7 @@ import express from 'express';
 import Collection from '../models/collection.model.js';
 import Item from '../models/item.model.js'
 import multer from 'multer'
+import Comments from '../models/comment.model.js'
 
 const router = express.Router();
 
@@ -67,10 +68,18 @@ router.route('/').post(async (req, res) => {
     res.json(`New collection ${name} by ${author} added!`);
 });
 
-router.route('/:id').delete((req, res) => {
+router.route('/:id').delete(async (req, res) => {
     Collection.deleteOne({
         _id: req.params.id
-    }).then(() => res.json('Deleted collection!')).catch(err => res.status(400).json(`Error: ${err}`))
+    })
+    const itemsToDelete = await Item.find({collectionId: req.params.id})
+    for (let item of itemsToDelete) {
+        await Comment.deleteMany({itemId: item._id})
+    }
+    await Item.deleteMany({
+        collectionId: req.params.id
+    })
+    return res.json("Deleted collection along with all items and comments in it!")
 })
 
 router.route('/:id').patch((req, res) => {

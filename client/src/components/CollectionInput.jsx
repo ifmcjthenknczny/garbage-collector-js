@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react'
 import LangContext from '../context/lang-context';
 import dictionary from '../content';
 import '../styles/CollectionInput.css'
+import { topicList } from '../globals'
 
 export default function CollectionInput(props) {
   const { username: author, clickFunction } = props;
-  const { _id: id, name, topic, description, created, items } = props.collectionData
-  const topicList = ['beer', 'painting', 'minerals', 'watch', 'game', 'book', 'vinyl', 'camera']
+  const { _id: id, name, topic, description, items } = props.collectionData
   const ctxLang = useContext(LangContext)
   const [nameValue, setNameValue] = useState(name ? name : '');
   const [topicValue, setTopicValue] = useState(topic ? topic : topicList.sort((a, b) => dictionary[a][ctxLang.language] < dictionary[b][ctxLang.language] ? -1 : 1)[0]);
@@ -32,16 +32,20 @@ export default function CollectionInput(props) {
   }
 
   return (
-    <tr className="Collection text-center">
+    <tr className="CollectionInput text-center">
       <td></td>
-      <td><input type="text" className="text-center border border-primary rounded" value={nameValue} onChange={handleNameChange} placeholder={dictionary.name[ctxLang.language]} /></td>
-      {/* <td><select id="topic" onChange={handleTopicChange}>{topicList.map(t => <option className="text-center" key={t} value={t}>{dictionary[t][ctxLang.language]}</option>)}
-      </select></td> */}
-      <td><select id="topic" onChange={handleTopicChange}>{topicList.sort((a,b) => dictionary[a][ctxLang.language] < dictionary[b][ctxLang.language] ? -1 : 1).map(topic => <option className="text-center" key={topic} value={topic}>{dictionary[topic][ctxLang.language]}</option>)}
-      </select></td>
+      <td><input type="text" className="text-center border border-primary rounded" value={nameValue} onChange={handleNameChange} placeholder={dictionary.name[ctxLang.language]} />
+      </td>
+      <td><select id="topic" onChange={handleTopicChange}>
+          {topicList.sort((a, b) => dictionary[a][ctxLang.language] < dictionary[b][ctxLang.language] ? -1 : 1).map(topic => <option className="text-center" key={topic} value={topic}>
+            {dictionary[topic][ctxLang.language]}
+          </option>)}
+        </select></td>
       <td><input type="text" className="text-center border border-primary rounded" value={descriptionValue} onChange={handleDescriptionChange} placeholder={dictionary.desc[ctxLang.language]} /></td>
       <td>{items ?? ""}</td>
-      <td><button className="button btn btn-success button rounded" onClick={handleClick}>{id ? dictionary.edit[ctxLang.language] : dictionary.add[ctxLang.language]}!</button></td>
+      <td><button className="button btn btn-success button rounded" onClick={handleClick}>
+          {id ? dictionary.edit[ctxLang.language] : dictionary.add[ctxLang.language]}!
+        </button></td>
     </tr>
   )
 }

@@ -9,9 +9,9 @@ import { generateLikeText } from '../helpers'
 import '../styles/Likebar.css'
 
 export default function Likebar(props) {
+    const { itemId, whoLiked } = props;
     const ctxAuth = useContext(AuthContext);
     const ctxLang = useContext(LangContext)
-    const {itemId, whoLiked} = props;
     const [likes, setLikes] = useState(whoLiked.length)
     const [alreadyLiked, setAlreadyLiked] = useState(whoLiked.includes(ctxAuth.loggedUser))
     const [likeText, setLikeText] = useState(generateLikeText(likes, ctxLang.language))
@@ -19,7 +19,7 @@ export default function Likebar(props) {
 
     useEffect(() => {
         setLikeText(generateLikeText(likes, ctxLang.language))
-    }, [likes, ctxLang.language])
+    }, [likes, ctxLang.language, itemId])
 
     const handleLikeClick = async () => {
         if (blockButton) return
