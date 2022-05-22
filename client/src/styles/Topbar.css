@@ -1,16 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@900&display=swap');
+
 button {
     width: 150px;
+    height: 40px;
 }
 
 .Topbar {
     background-color: whitesmoke;
     width: 100vw;
+    top: 0;
 }
 
 .dark-theme {
     background-color: black !important;
 }
 
-.btn-success {
-    text-transform: capitalize;
+.Logo {
+    color: #131313;
+    letter-spacing: .15em;
+    font-weight: 900;
+    text-shadow: 1px -1px #767676;
+    font-family: 'Roboto Slab', serif;
+    cursor: pointer;
+}
+
+.dark-theme .Logo {
+    color: whitesmoke;
+    text-shadow: 1px -1px #898989;
 }

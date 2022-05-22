@@ -23,7 +23,7 @@ export default function Tagcloud(props) {
     <section className={"Tagcloud ".concat(classes)}>
       <h4 className="Tagcloud__title">{dictionary.tagcloud[ctxLang.language]}</h4>
       <div className="Tagcloud__tags">
-        {tags ? tags.map(t => <Link className="Link--tagcloud" to={"/search/".concat(t.trim().replaceAll(" ","-"))}>{t.concat(" ")}</Link>) : ""}
+        {tags ? tags.map(t => <Link className="Link--tagcloud" to={"/search/".concat(t.trim().replaceAll(" ","+"))}>{t.concat(" ")}</Link>) : ""}
       </div>
     </section>
   )

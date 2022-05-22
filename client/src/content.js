@@ -4,11 +4,11 @@ const dictionary = {
         pl: "Witamy na"
     },
     content: {
-        en: ["This is The Place, one and only and created especially for you. Add your items to multiple customizable collections, like and comment all people's most dearest objects while searching all over the place and, I explicitly require this, have fun!",
+        en: ["This is The Place, one and only and created especially for you. Add your items to multiple customizable collections, like and comment all people's most dearest objects while searching all over the place and have fun!",
             "Check out the biggest collections and latest added items right below!"
         ],
-        pl: ["To jest TO miejsce, jedno i jedyne, stworzone specjalnie dla Ciebie. Dodaj swoje przedmioty do wielu modyfikowalnych kolekcji, polub i komentuj wszystkich najukochańsze przedmioty podczas przeszukiwania całej strony i, dosłownie wymagam tego, baw się dobrze!",
-            "Sprawdź największe kolekcje i ostatnio dodane przedmioty poniżej!"
+        pl: ["To jest TO miejsce, jedno i jedyne, stworzone specjalnie dla Ciebie. Dodaj swoje przedmioty do wielu modyfikowalnych kolekcji, lub i komentuj najukochańsze przedmioty wszystkich użytkowników podczas frywolnego przeszukiwania całej strony i baw się dobrze!",
+            "Sprawdź największe kolekcje i ostatnio dodane przedmioty poniżej."
         ]
     },
     search: {
@@ -293,7 +293,7 @@ const dictionary = {
     },
     loggedas: {
         en: "logged as",
-        pl: "zalogowany użytkownik:"
+        pl: "zalogowano jako"
     },
     dontlikeit: {
         en: "I don't like it anymore",
@@ -363,8 +363,18 @@ const dictionary = {
         en: "Clear filter",
         pl: "Wyczyść filtr"
     },
+    homepage: {
+        en: "Home page",
+        pl: "Strona domowa"
+    },
+    noresults: {
+        en: "There are no results for this query in database.",
+        pl: "Brak wyników dla tej frazy w bazie danych."
+    },
+    searchres: {
+        en: "Search results",
+        pl: "Wyniki wyszukiwania"
+    }
 }
-
-// const topicList = ['beer', 'painting', 'minerals', 'watch', 'game', 'book', 'vinyl', 'camera']
 
 export default dictionary;

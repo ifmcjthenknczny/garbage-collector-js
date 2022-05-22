@@ -5,19 +5,22 @@ import Topbar from './Topbar'
 import Frontpage from './Frontpage'
 import Footer from './Footer'
 import Login from './Login'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import Admin from './Admin'
 import UserPage from './UserPage'
 import CollectionPage from './CollectionPage'
 import ItemPage from './ItemPage'
 import Error from './Error'
-import SearchResults from './SearchResults'
+import SearchResultsPage from './SearchResultsPage'
+import BackButton from './BackButton';
+import '../styles/SearchResultsPage.css'
 
 export default function Main(props) {
     const ctxTheme = useContext(ThemeContext);
     const themeClassName = ctxTheme.isDarkMode ? "dark-theme" : "light-theme";
+    const location = useLocation();
     return (
-        <div className={"Main d-flex flex-column align-items-center justify-content-center ".concat(themeClassName)}>
+        <div className={"Main d-flex flex-column align-items-center ".concat(themeClassName)}>
             <Topbar theme={themeClassName} />
             <div className="Main__content">
                 <Routes>
@@ -28,11 +31,12 @@ export default function Main(props) {
                     <Route path='/user/:username' element={<UserPage />} exact />
                     <Route path='/collection/:collectionId' element={<CollectionPage />} exact />
                     <Route path='/item/:itemId' element={<ItemPage />} exact />
-                    <Route path='/search/:query' element={<SearchResults />} exact />
+                    <Route path='/search/:query' element={<SearchResultsPage />} exact />
                     <Route path='/error' element={<Error />} exact />
                     <Route path="*" element={<Error />} />
                 </Routes>
             </div>
+            {location.pathname !== "/" ? <BackButton /> : ""}
             <Footer theme={themeClassName} />
         </div>
     )

@@ -25,10 +25,10 @@ export default function Frontpage(props) {
             <div className="Frontpage__content lead mt-5">
                 {dictionary.content[language].map(c => <p>{c}</p>)}
             </div>
-            <div className="Frontpage__attention-bar mt-5 row">
-                <Bestlist header={dictionary.largest[language]} topValueName="items" bottomValueName="author" apiLink={apiLinkCollections} elementLinkTemplate="/collection/" classes="col-4" />
-                <Tagcloud classes="col-4" />
-                <Bestlist header={dictionary.latest[language]} bottomValueName="added" apiLink={apiLinkItems} elementLinkTemplate="/item/" classes={"col-4 ".concat(themeClassName)} />
+            <div className="Frontpage__attention-bar row">
+                <Bestlist header={dictionary.largest[language]} topValueName="items" bottomValueName="author" apiLink={apiLinkCollections} elementLinkTemplate="/collection/" classes="col-md-4 col-12 mt-5" />
+                <Tagcloud classes="col-md-4 col-12 mt-5" />
+                <Bestlist header={dictionary.latest[language]} bottomValueName="added" apiLink={apiLinkItems} elementLinkTemplate="/item/" classes="col-md-4 col-12 mt-5" />
             </div>
         </main>
     )

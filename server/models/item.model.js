@@ -6,7 +6,7 @@ const ItemSchema = new mongoose.Schema({
     collectionId: String,
     added: Date,
     rest: Map,
-    likesFrom: Array
+    likesFrom: Array,
 });
 const Item = mongoose.model('Item', ItemSchema);
 

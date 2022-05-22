@@ -1,6 +1,7 @@
 .Footer {
     background-color: whitesmoke;
     width: 100vw;
+    bottom: 0;
 }
 
 .dark-theme {

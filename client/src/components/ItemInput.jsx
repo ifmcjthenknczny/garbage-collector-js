@@ -41,7 +41,7 @@ export default function ItemInput(props) {
 
   const handleFocus = (evt) => {
     evt.target.scrollLeft = evt.target.scrollWidth;
-    setDropdownValues(filterByTerm(allTags, tagsValue.split(',').at(-1), 3))
+    setDropdownValues(filterByTerm(allTags, tagsValue.split(', ')[tagsValue.split(', ').length - 1], 3))
   }
 
   const getTags = async () => {

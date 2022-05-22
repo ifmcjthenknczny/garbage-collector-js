@@ -21,4 +21,40 @@ router.route('/tags').get(async (req, res) => {
     return res.status(200).json(tagArrays);
 })
 
+router.route('/search/:query').get(async (req, res) => {
+    const query = req.params.query.replaceAll('+', ' ')
+    const searchRes = await Item.aggregate([{
+            $search: {
+                index: 'search',
+                text: {
+                    query: query,
+                    path: {
+                        wildcard: '*'
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                collectionId: 1,
+                score: {
+                    $meta: 'searchScore'
+                },
+            },
+        },
+        {
+            $sort: {
+                score: -1
+            }
+        },
+        {
+            $limit: 10
+        }
+    ])
+    return res.status(200).json(searchRes)
+})
+
+
 export default router

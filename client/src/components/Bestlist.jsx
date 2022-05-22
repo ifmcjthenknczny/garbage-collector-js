@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import '../styles/Bestlist.css'
 import axios from 'axios'
-import BestlistElement from './BestlistElement'
+import ListElement from './ListElement'
 import ThemeContext from '../context/theme-context';
 
 export default function Bestlist(props) {
@@ -24,7 +24,7 @@ export default function Bestlist(props) {
                 {header}
             </h4>
             <ol className="list-group list-group-numbered">
-                {top ? top.map(p => <BestlistElement id={p._id} key={p._id} name={p.name} bottomValue={p[bottomValueName]} topValue={p[topValueName]} urlTemplate={elementLinkTemplate} darkMode={isDarkMode} />) : ""}
+                {top ? top.map(p => <ListElement id={p._id} key={p._id} name={p.name} bottomValue={p[bottomValueName]} topValue={p[topValueName]} urlTemplate={elementLinkTemplate} darkMode={isDarkMode} />) : ""}
             </ol>
         </div>
     )

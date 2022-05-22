@@ -38,10 +38,6 @@ router.post('/imageupload', upload.single('file'), (req, res, next) => {
     })
 })
 
-// router.route('/imageupload', upload.single('file')).post((req, res, next) => {
-//     return res.json({image: req.file.filename})
-// })
-
 router.route('/:id').get((req, res) => {
     Collection.findOne({
         _id: req.params.id

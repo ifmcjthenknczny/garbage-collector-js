@@ -24,13 +24,14 @@ export default function ItemPage() {
     const [propertyToEdit, setPropertyToEdit] = useState({});
 
     const ctxAuth = useContext(AuthContext);
-    const ctxLang = useContext(LangContext)
+    const ctxLang = useContext(LangContext);
+    const { itemId: id } = params;
+
 
     useEffect(() => {
         fetchItemData();
-    }, [])
+    }, [id])
 
-    const { itemId: id } = params;
     const { name, tags, added, collectionId, collectionName, likesFrom, rest, author } = itemData;
     const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
 
@@ -91,7 +92,6 @@ export default function ItemPage() {
                 </tbody>
             </table>
 
-            <Button className="mt-5 mb-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} />
             <CommentSection itemId={id} /></>)}
         </div>
     )

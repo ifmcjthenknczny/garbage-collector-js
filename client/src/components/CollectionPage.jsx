@@ -10,6 +10,8 @@ import DB_HOST from "../DB_HOST"
 import Button from './Button'
 import PanelButton from './PanelButton'
 import LoadingSpinner from './LoadingSpinner';
+import ReactMarkdown from 'react-markdown'
+import gfm from 'remark-gfm';
 
 export default function CollectionPage() {
   const params = useParams();
@@ -18,13 +20,13 @@ export default function CollectionPage() {
   const [collectionData, setCollectionData] = useState({})
   const [loaded, setLoaded] = useState(false)
   const ctxAuth = useContext(AuthContext);
-  const ctxLang = useContext(LangContext)
+  const ctxLang = useContext(LangContext);
+  const { collectionId: id } = params;
 
   useEffect(() => {
     fetchCollectionData();
-  }, [])
+  }, [id])
 
-  const { collectionId: id } = params;
   let { name, description, topic, imageLink, author, items, created } = collectionData;
   created = new Date(created).toLocaleString(ctxLang.language)
   const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
@@ -61,10 +63,10 @@ export default function CollectionPage() {
         ) : ""}
         <h5 className="CollectionPage__topic mt-3">{dictionary[topic][ctxLang.language]}</h5>
         <h5 className="CollectionPage__created">{dictionary.createdtime[ctxLang.language]} {created}</h5>
-        <p className="CollectionPage__description">{description}</p>
+        <p className="CollectionPage__description"><ReactMarkdown remarkPlugins={[gfm]}>{description}</ReactMarkdown></p>
 
         <ItemPanel editable={editable} collectionId={id} />
-        <Button classname="mt-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} /></>)}
+        </>)}
     </div>
   )
 }

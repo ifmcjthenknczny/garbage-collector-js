@@ -4,9 +4,6 @@
     text-shadow: 1px -1px #767676;
 }
 
-button {
-    width: 100px;
-}
 
 .dark-theme {
     background: black;
@@ -20,10 +17,18 @@ button {
     text-decoration: none;
 }
 
-.Main__content {
-    // height: 100vh;
+.Main {
+    min-height: 100vh;
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }

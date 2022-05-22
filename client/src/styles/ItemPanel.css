@@ -2,3 +2,7 @@
 .fa-filter:hover {
     color: green;
 }
+
+.table {
+    width: 80vw;
+}

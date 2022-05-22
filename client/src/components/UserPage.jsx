@@ -18,12 +18,12 @@ export default function UserPage() {
   const [loaded, setLoaded] = useState(false)
   const ctxAuth = useContext(AuthContext);
   const ctxLang = useContext(LangContext)
+  const { username } = params;
 
   useEffect(() => {
     fetchUserData();
-  }, [])
+  }, [username])
 
-  const { username } = params;
   let { _id, lastLogin, registrationTime, isActive, isAdmin } = userData;
   if (!lastLogin) lastLogin = dictionary.never[ctxLang.language]
   else lastLogin = new Date(lastLogin).toLocaleString(ctxLang.language)
@@ -54,7 +54,7 @@ export default function UserPage() {
         <h6 className="UserPage__lastLogin">{dictionary.lastlogin[ctxLang.language]}: {lastLogin}</h6>
         </div> 
       <CollectionPanel editable={editable} username={username} />
-      <Button classname="mt-5 align-self-center justify-self-center" onClick={() => navigate(-1)} content={dictionary.back[ctxLang.language]} /></>)}
+      </>)}
     </div>
   )
 }

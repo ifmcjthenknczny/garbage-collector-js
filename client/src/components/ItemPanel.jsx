@@ -147,8 +147,8 @@ export default function ItemPanel(props) {
         {editable ? <PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClickAdd} /> : ""}
         {editable && items.length > 0 ? <><PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteCollections} />
           <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleClickEdit} /></> : ""}
-        <PanelButton text={dictionary.sort[ctxLang.language]} className="fa-solid fa-arrow-down-a-z fs-3" onClick={handleSort} />
-        <PanelButton text={dictionary.filter[ctxLang.language]} className="fa-solid fa-filter fs-3" onClick={handleFilterClick} />
+        {items.length > 1 ? <><PanelButton text={dictionary.sort[ctxLang.language]} className="fa-solid fa-arrow-down-a-z fs-3" onClick={handleSort} />
+          <PanelButton text={dictionary.filter[ctxLang.language]} className="fa-solid fa-filter fs-3" onClick={handleFilterClick} /></> : ""}
       </div>
       <div className="ItemPanel__filter d-flex flex-row">
         <input type={filterVisibility ? "text" : "hidden"} value={filter} onChange={handleFilterInput} placeholder={dictionary.enterfilter[ctxLang.language]} />

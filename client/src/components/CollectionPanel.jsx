@@ -13,7 +13,7 @@ export default function CollectionPanel(props) {
 
     useEffect(() => {
         fetchCollections();
-    }, [])
+    }, [username])
 
     const [checkedCollections, setCheckedCollections] = useState([]);
     const [collections, setCollections] = useState([])
@@ -101,7 +101,6 @@ export default function CollectionPanel(props) {
 
     const labels = [dictionary.name[ctxLang.language], dictionary.topic[ctxLang.language], dictionary.desc[ctxLang.language], dictionary.size[ctxLang.language]]
     const labelsHTML = labels.map(e => <th key={e}>{e}</th>)
-    const collectionsData = collections.map(e => <Collection key={e._id} id={e._id} name={e.name} description={e.description} topic={e.topic} imageLink={e.imageLink} items={e.items} editable={editable} created={e.created.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedCollections} />)
 
     return (
         <div className="CollectionPanel d-flex flex-column mt-4 justify-content-center align-items-center">
@@ -123,7 +122,7 @@ export default function CollectionPanel(props) {
                         {labelsHTML}
                     </tr></thead>
                     <tbody>
-                        {collectionsData}
+                        {collections.map(e => <Collection key={e._id} id={e._id} name={e.name} description={e.description} topic={e.topic} imageLink={e.imageLink} items={e.items} editable={editable} created={e.created.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedCollections} />)}
                         {addNew ? <CollectionInput clickFunction={addCollection} username={username} collectionData={{}} /> : ""}
                         {editOn ? <CollectionInput clickFunction={editCollection} username={username} collectionData={collectionToEdit[0] ?? {}} /> : ""}
                     </tbody>
