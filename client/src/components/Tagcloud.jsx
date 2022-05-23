@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import DB_HOST from '../DB_HOST'
-import '../styles/Tagcloud.css'
+import React, { useContext, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import dictionary from '../content'
 import LangContext from '../context/lang-context'
-import { Link } from 'react-router-dom'
+import DB_HOST from '../DB_HOST'
+import '../styles/Tagcloud.css'
 
 export default function Tagcloud(props) {
   const { classes } = props;
-  const [tags, setTags] = useState([])
   const ctxLang = useContext(LangContext)
+  const [tags, setTags] = useState([])
+
   useEffect(() => {
     getTags();
   }, [])

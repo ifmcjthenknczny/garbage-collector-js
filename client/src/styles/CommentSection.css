@@ -1,0 +1,7 @@
+.CommentSection__button {
+    height: auto;
+}
+
+.CommentSection__button:hover {
+    font-weight: 600;
+}

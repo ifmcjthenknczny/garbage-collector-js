@@ -28,3 +28,20 @@ button {
     color: whitesmoke;
     text-shadow: 1px -1px #898989;
 }
+
+.img-thumbnail {
+    height: 30px;
+    width: 30px;
+    background: transparent;
+    border: none !important;
+}
+
+.Button:hover .fa-sun {
+    color: gold;
+    transition: .4s;
+}
+
+.Button:hover .fa-moon {
+    color: rgb(32, 32, 32);
+    transition: .4s;
+}

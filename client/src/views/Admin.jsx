@@ -1,25 +1,28 @@
-import '../styles/Admin.css';
-import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
-import User from './User'
-import AuthContext from '../context/auth-context';
-import { useNavigate } from "react-router-dom";
-import DB_HOST from '../DB_HOST'
-import PanelButton from './PanelButton'
-import dictionary from '../content';
-import LangContext from '../context/lang-context';
-import LoadingSpinner from './LoadingSpinner'
-import { userLabels } from '../globals'
 import { nanoid } from 'nanoid';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import LoadingSpinner from '../components/LoadingSpinner';
+import PanelButton from '../components/PanelButton';
+import User from '../components/User';
+import dictionary from '../content';
+import AuthContext from '../context/auth-context';
+import LangContext from '../context/lang-context';
+import DB_HOST from '../DB_HOST';
+import { userLabels } from '../globals';
+import '../styles/Admin.css';
 
 export default function Admin(props) {
     const { theme } = props;
-    const [checkedUsers, setCheckedUsers] = useState([]);
-    const [users, setUsers] = useState([])
-    const [loaded, setLoaded] = useState(false)
+
     const ctxAuth = useContext(AuthContext);
     const ctxLang = useContext(LangContext);
-    let navigate = useNavigate();
+
+    const [checkedUsers, setCheckedUsers] = useState([]);
+    const [loaded, setLoaded] = useState(false)
+    const [users, setUsers] = useState([])
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         redirectIfNotAdmin();
@@ -27,10 +30,9 @@ export default function Admin(props) {
     })
 
     const redirectIfNotAdmin = () => {
-        if (!ctxAuth.isAdmin) {
-            ctxAuth.onLogout();
-            navigate("/");
-        }
+        if (ctxAuth.isAdmin) return
+        ctxAuth.onLogout();
+        navigate("/");
     }
 
     const clearCheckboxes = () => {

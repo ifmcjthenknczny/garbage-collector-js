@@ -1,23 +1,25 @@
-import React, { useContext } from 'react'
-import '../styles/Main.css'
+import React, { useContext } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import ThemeContext from '../context/theme-context';
-import Topbar from './Topbar'
-import Frontpage from './Frontpage'
-import Footer from './Footer'
-import Login from './Login'
-import { Route, Routes, useLocation } from 'react-router-dom'
-import Admin from './Admin'
-import UserPage from './UserPage'
-import CollectionPage from './CollectionPage'
-import ItemPage from './ItemPage'
-import Error from './Error'
-import SearchResultsPage from './SearchResultsPage'
+import '../styles/Main.css';
+import Admin from '../views/Admin';
+import CollectionPage from '../views/CollectionPage';
+import Error from '../views/Error';
+import Frontpage from '../views/Frontpage';
+import ItemPage from '../views/ItemPage';
+import Login from '../views/Login';
+import SearchResultsPage from '../views/SearchResultsPage';
+import UserPage from '../views/UserPage';
 import BackButton from './BackButton';
+import Footer from './Footer';
+import Topbar from './Topbar';
 
 export default function Main(props) {
     const ctxTheme = useContext(ThemeContext);
     const themeClassName = ctxTheme.isDarkMode ? "dark-theme" : "light-theme";
+
     const location = useLocation();
+
     return (
         <div className={"Main d-flex flex-column align-items-center ".concat(themeClassName)}>
             <Topbar theme={themeClassName} />

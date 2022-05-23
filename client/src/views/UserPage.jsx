@@ -1,32 +1,37 @@
-import React, { useContext, useEffect, useState } from 'react'
-import dictionary from '../content';
-import LangContext from '../context/lang-context';
-import AuthContext from '../context/auth-context';
-import CollectionPanel from './CollectionPanel';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
-import DB_HOST from "../DB_HOST"
-import LoadingSpinner from './LoadingSpinner'
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import CollectionPanel from '../components/CollectionPanel';
+import LoadingSpinner from '../components/LoadingSpinner';
+import dictionary from '../content';
+import AuthContext from '../context/auth-context';
+import LangContext from '../context/lang-context';
+import DB_HOST from "../DB_HOST";
 
 export default function UserPage() {
   const params = useParams();
   const { username } = params;
-  const [userData, setUserData] = useState({})
-  const [loaded, setLoaded] = useState(false)
+
   const ctxAuth = useContext(AuthContext);
   const ctxLang = useContext(LangContext)
+
+  const [loaded, setLoaded] = useState(false)
+  const [userData, setUserData] = useState({})
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserData();
   }, [username])
 
-  let { _id, lastLogin, registrationTime, isActive, isAdmin } = userData;
+  let { _id, isActive, isAdmin, lastLogin, registrationTime } = userData;
   if (!lastLogin) lastLogin = dictionary.never[ctxLang.language]
   else lastLogin = new Date(lastLogin).toLocaleString(ctxLang.language)
   registrationTime = new Date(registrationTime).toLocaleString(ctxLang.language)
+
   const classNameActive = isActive ? "" : "text-danger"
   const classNameAdmin = isAdmin ? "fw-bolder" : "fw-light"
+  
   const editable = username === ctxAuth.loggedUser || ctxAuth.isAdmin
 
   const fetchUserData = async () => {

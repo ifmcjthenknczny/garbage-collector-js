@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import LangContext from '../context/lang-context'
 import { Link } from 'react-router-dom'
 import dictionary from '../content'
+import LangContext from '../context/lang-context'
 import '../styles/Error.css'
 
 export default function Error() {
     const ctxLang = useContext(LangContext)
+    
     return (
         <div className="Error d-flex flex-column align-content-center justify-content-center">
             <h1 className="mt-5 mb-5 pt-2 Error__title">

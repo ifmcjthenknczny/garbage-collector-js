@@ -31,8 +31,8 @@ No setup needed just run the deployed page. Just make sure you run proper browse
 * Admin, collection and user panel with CRUD activities
 * User, collection and item pages
 * Light / dark mode
-* Two language support
-* Tags entering autocompletion dropdown menu
+* Two language support, translated on click without reloading
+* Tags autocompletion dropdown menu
 * Adding comments for items
 * Adding / removing likes for items
 * Latest added items, Biggest collections, Tagcloud
@@ -43,19 +43,18 @@ No setup needed just run the deployed page. Just make sure you run proper browse
 * Markdown formatting support for collection description
 * Full-text search through Collections, Comments and Items & search result page
 * Clear navigation through page
-* Subtle, yet pretty Error Page
 * Loading spinners
+* Subtle, yet pretty Error Page
 
 To do:
-* Some code style improvement and unification (context and search backend, button component, nanoid for all maps, props cleanup)
-* Debounce of input
-* Loaders for panels
-* Separate file for globals: constants, links, arrays etc. and helpers
-* UK / polish flag for language change
+* Some code style improvement and unification (destructurized LangContext, ThemeContext used only when necessary, and search backend, button component, nanoid for all maps, props cleanup and passed in destructurizable form, classes props)
+* Debounce of input values
+* Separate file for globals: constants, links, arrays etc. and more helpers function
 * Dark mode colors diversity
+* Interactive tags dropdown
 
 ## Status
-Project is: _in progress_
+Project is: _finished_
 
 ## Inspiration
 It is final project of ITransition Intern Front-End Developer training programme.

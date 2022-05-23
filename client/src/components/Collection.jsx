@@ -1,12 +1,12 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
-import LangContext from '../context/lang-context';
+import gfm from 'remark-gfm';
 import dictionary from '../content';
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
+import LangContext from '../context/lang-context';
 
 export default function Collection(props) {
-    const { checkboxEvent, name, description, topic, editable, id, items } = props;
+    const { checkboxEvent, description, editable, id, items, name, topic } = props;
     const ctxLang = useContext(LangContext);
 
     const handleCheck = () => {

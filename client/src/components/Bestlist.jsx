@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
-import ListElement from './ListElement'
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import ThemeContext from '../context/theme-context';
+import ListElement from './ListElement';
 
 export default function Bestlist(props) {
-    const { header, apiLink, topValueName, bottomValueName, elementLinkTemplate, classes } = props
+    const { apiLink, bottomValueName, classes, elementLinkTemplate, header, topValueName } = props;
+    const { isDarkMode } = useContext(ThemeContext);
     const [top, setTop] = useState([]);
-    const isDarkMode = useContext(ThemeContext).isDarkMode;
 
     useEffect(() => {
         getElements();
@@ -22,7 +22,7 @@ export default function Bestlist(props) {
             <h4 className="Bestlist__title">
                 {header}
             </h4>
-            <ol className="list-group list-group-numbered">
+            <ol className="list-group list-group-numbered Bestlist__list">
                 {top ? top.map(p => <ListElement id={p._id} key={p._id} name={p.name} bottomValue={p[bottomValueName]} topValue={p[topValueName]} urlTemplate={elementLinkTemplate} darkMode={isDarkMode} />) : ""}
             </ol>
         </div>

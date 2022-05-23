@@ -390,6 +390,14 @@ const dictionary = {
     admin: {
         en: "Admin",
         pl: "Admin"
+    },
+    onlyonecheck: {
+        en: "You can only edit one element at a time!",
+        pl: "Możesz edytować tylko jeden element na raz!"
+    },
+    lang: {
+        en: "Language",
+        pl: "Język"
     }
 }
 

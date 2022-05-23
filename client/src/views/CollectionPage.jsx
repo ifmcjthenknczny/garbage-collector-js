@@ -1,31 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react'
-import '../styles/CollectionPage.css'
-import dictionary from '../content';
-import LangContext from '../context/lang-context';
-import AuthContext from '../context/auth-context';
-import ItemPanel from './ItemPanel';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import DB_HOST from "../DB_HOST"
-import PanelButton from './PanelButton'
-import LoadingSpinner from './LoadingSpinner';
-import ReactMarkdown from 'react-markdown'
+import React, { useContext, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import gfm from 'remark-gfm';
+import ItemPanel from '../components/ItemPanel';
+import LoadingSpinner from '../components/LoadingSpinner';
+import PanelButton from '../components/PanelButton';
+import dictionary from '../content';
+import AuthContext from '../context/auth-context';
+import LangContext from '../context/lang-context';
+import DB_HOST from "../DB_HOST";
+import '../styles/CollectionPage.css';
 
 export default function CollectionPage() {
   const params = useParams();
   const { collectionId: id } = params;
-  const [collectionData, setCollectionData] = useState({})
-  const [loaded, setLoaded] = useState(false)
-  const navigate = useNavigate();
+
   const ctxAuth = useContext(AuthContext);
   const ctxLang = useContext(LangContext);
+
+  const [collectionData, setCollectionData] = useState({})
+  const [loaded, setLoaded] = useState(false)
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCollectionData();
   }, [id])
 
-  let { name, description, topic, imageLink, author, created } = collectionData;
+  let { author, created, description, imageLink, name, topic } = collectionData;
   created = new Date(created).toLocaleString(ctxLang.language)
   const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
 

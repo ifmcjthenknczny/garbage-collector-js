@@ -1,18 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react'
-import LangContext from '../context/lang-context'
-import { useParams } from 'react-router-dom'
-import LoadingSpinner from './LoadingSpinner'
 import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import LoadingSpinner from '../components/LoadingSpinner'
+import SearchResult from '../components/SearchResult'
 import dictionary from '../content'
+import LangContext from '../context/lang-context'
 import DB_HOST from '../DB_HOST'
-import SearchResult from './SearchResult'
 
 export default function SearchResultsPage() {
   const params = useParams()
   const { query } = params;
-  const [searchResults, setSearchResults] = useState([])
-  const [loaded, setLoaded] = useState(false)
+
   const ctxLang = useContext(LangContext);
+
+  const [loaded, setLoaded] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
 
   useEffect(() => {
     getSearchResults();

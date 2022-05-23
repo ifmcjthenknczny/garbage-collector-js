@@ -1,10 +1,10 @@
+import { AuthContextProvider } from '../context/auth-context';
+import { LangContextProvider } from '../context/lang-context';
+import { ThemeContextProvider } from '../context/theme-context';
 import '../styles/App.css';
-import Main from './Main.jsx'
-import { AuthContextProvider } from '../context/auth-context'
-import { LangContextProvider } from '../context/lang-context'
-import { ThemeContextProvider } from '../context/theme-context'
+import Main from './Main.jsx';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <ThemeContextProvider>
@@ -17,5 +17,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

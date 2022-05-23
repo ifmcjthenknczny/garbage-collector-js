@@ -1,21 +1,27 @@
-import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import dictionary from '../content';
+import LangContext from '../context/lang-context';
+import DB_HOST from '../DB_HOST';
+import { collectionLabels } from '../globals';
 import '../styles/CollectionPanel.css';
 import Collection from './Collection';
-import DB_HOST from '../DB_HOST';
-import dictionary from '../content'
-import LangContext from '../context/lang-context'
-import PanelButton from './PanelButton'
 import CollectionInput from './CollectionInput';
+import LoadingSpinner from './LoadingSpinner';
+import PanelButton from './PanelButton';
 
 export default function CollectionPanel(props) {
     const { editable, username } = props;
+
+    const ctxLang = useContext(LangContext);
+    
+    const [addNew, setAddNew] = useState(false)
+    const [alert, setAlert] = useState('')
     const [checkedCollections, setCheckedCollections] = useState([]);
     const [collections, setCollections] = useState([])
-    const [addNew, setAddNew] = useState(false)
-    const [editOn, setEditOn] = useState(false)
     const [collectionToEdit, setCollectionToEdit] = useState({});
-    const ctxLang = useContext(LangContext);
+    const [editOn, setEditOn] = useState(false)
+    const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
         fetchCollections();
@@ -46,6 +52,7 @@ export default function CollectionPanel(props) {
     const fetchCollections = async () => {
         const data = await axios.get(`${DB_HOST}/api/users/${username}/collections`);
         setCollections(data.data);
+        setLoaded(true);
     }
 
     const deleteCollections = async () => {
@@ -79,8 +86,10 @@ export default function CollectionPanel(props) {
         } else if (editOn) {
             setEditOn(false)
             setCollectionToEdit({})
-            // setCollections([...collections, collectionToEdit])
             await fetchCollections();
+        } else if (checkedCollections.length > 1) {
+            setAlert(dictionary.onlyonecheck[ctxLang.language])
+            setTimeout(() => setAlert(''), 3000)
         }
         clearCheckboxes();
     }
@@ -95,31 +104,30 @@ export default function CollectionPanel(props) {
         clearCheckboxes();
     }
 
-    const labels = [dictionary.name[ctxLang.language], dictionary.topic[ctxLang.language], dictionary.desc[ctxLang.language], dictionary.size[ctxLang.language]]
-    const labelsHTML = labels.map(e => <th key={e}>{e}</th>)
-
     return (
         <div className="CollectionPanel d-flex flex-column mt-4 justify-content-center align-items-center">
-            <span className="fs-1 mb-3 fw-bold">{dictionary.usercoll[ctxLang.language]}:</span>
+        {!loaded ? <LoadingSpinner /> : (<> 
+            <span className="fs-2 mb-4 mt-4 CollectionPanel__alert">{alert}</span>
+            <span className="fs-1 mb-3 fw-bold CollectionPanel__header">{dictionary.usercoll[ctxLang.language]}:</span>
             {editable ? <div className="buttons CollectionPanel__toolbox d-flex justify-content-around align-content-center mb-4 align-self-center">
                 <PanelButton text={dictionary.add[ctxLang.language]} className="fa-solid fa-circle-plus fs-3" onClick={handleClickAdd} />
                 {collections.length > 0 ? <><PanelButton text={dictionary.delete[ctxLang.language]} className="fa-solid fa-trash-can fs-3 text-danger" onClick={deleteCollections} />
                     <PanelButton text={dictionary.edit[ctxLang.language]} className="fa-solid fa-gear fs-3" onClick={handleClickEdit} /></> : ""}
             </div> : ""}
-            {collections.length === 0 && !addNew && !editOn ? <h3 className="CollectionPanel text-center mt-4">{dictionary.nocoll[ctxLang.language]}</h3> : (
+            {collections.length === 0 && !addNew && !editOn ? <h3 className="CollectionPanel__error text-center mt-4">{dictionary.nocoll[ctxLang.language]}</h3> : (
                 <table className="CollectionPanel_table table">
                     <thead><tr>
                         {editable ? <th><div className="form-check">
                             <input className="form-check-input main-checkbox" type="checkbox" value="" id="flexCheckDefault" onClick={selectAll} />
                         </div></th> : ""}
-                        {labelsHTML}
+                        {collectionLabels.map(e => <th key={e}>{dictionary[e][ctxLang.language]}</th>)}
                     </tr></thead>
                     <tbody>
                         {collections.map(e => <Collection key={e._id} id={e._id} name={e.name} description={e.description} topic={e.topic} imageLink={e.imageLink} items={e.items} editable={editable} created={e.created.toLocaleString(ctxLang.language)} checkboxEvent={updateCheckedCollections} />)}
                         {addNew ? <CollectionInput clickFunction={addCollection} username={username} collectionData={{}} /> : ""}
                         {editOn ? <CollectionInput clickFunction={editCollection} username={username} collectionData={collectionToEdit[0] ?? {}} /> : ""}
                     </tbody>
-                </table>)}
+                </table>)}</>)}
         </div>
     )
 }

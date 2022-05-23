@@ -1,18 +1,21 @@
 import React, { useContext } from 'react'
-import Searchbar from './Searchbar'
-import '../styles/Topbar.css'
-import ThemeContext from '../context/theme-context'
-import LangContext from '../context/lang-context'
-import AuthContext from '../context/auth-context'
-import Button from './Button';
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import dictionary from '../content'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
+import AuthContext from '../context/auth-context'
+import LangContext from '../context/lang-context'
+import ThemeContext from '../context/theme-context'
+import en from '../images/en.png'
+import pl from '../images/pl.png'
+import '../styles/Topbar.css'
+import Button from './Button'
+import Searchbar from './Searchbar'
 
 export default function Topbar(props) {
     const ctxAuth = useContext(AuthContext);
     const ctxTheme = useContext(ThemeContext);
     const ctxLang = useContext(LangContext);
     const { language } = ctxLang;
+
     const navigate = useNavigate();
     const location = useLocation().pathname;
 
@@ -33,7 +36,7 @@ export default function Topbar(props) {
                     <Button className="button--theme" onClick={ctxTheme.toggleTheme} content={ctxTheme.isDarkMode ?
                         <i className="fa-solid fa-sun align-self-center" /> :
                         <i className="fa-solid fa-moon align-self-center" />} />
-                    <Button className="button--language" onClick={ctxLang.toggleLanguage} content={<i className="fa-solid fa-language align-self-center" />} />
+                    <Button className="button--language" onClick={ctxLang.toggleLanguage} content={<img className="img-thumbnail" src={language === 'pl' ? en : pl} alt={dictionary.lang[language]} />} />
                 </div>
             </div>
             <div className="Topbar__bottom mb-md-4 mb-2 d-flex flex-column flex-md-row justify-content-evenly align-items-center">

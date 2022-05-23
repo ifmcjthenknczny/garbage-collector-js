@@ -1,12 +1,13 @@
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
-import '../styles/User.css'
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import dictionary from '../content';
 import LangContext from '../context/lang-context';
+import '../styles/User.css';
 
 export default function User(props) {
-    let { checkboxEvent, name, email, lastlogin, regtime, status, isAdmin } = props;
+    let { checkboxEvent, email, isAdmin, lastlogin, name, regtime, status } = props;
     const ctxLang = useContext(LangContext)
+
     if (lastlogin === null) {
         lastlogin = dictionary.never[ctxLang.language]
     } else {

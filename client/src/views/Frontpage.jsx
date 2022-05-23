@@ -1,15 +1,16 @@
-import React, { useContext } from 'react'
+import { nanoid } from 'nanoid';
+import React, { useContext } from 'react';
+import Bestlist from '../components/Bestlist';
+import Tagcloud from '../components/Tagcloud';
 import dictionary from '../content';
-import Bestlist from './Bestlist'
-import '../styles/Frontpage.css'
 import LangContext from '../context/lang-context';
-import Tagcloud from './Tagcloud';
 import DB_HOST from '../DB_HOST';
-import jumbotron from "../images/jumbotron.jpg"
-import { nanoid } from 'nanoid'
+import jumbotron from "../images/jumbotron.jpg";
+import '../styles/Frontpage.css';
 
 export default function Frontpage(props) {
     const ctxLang = useContext(LangContext);
+    
     const apiLinkCollections = `${DB_HOST}/api/biggest-collections`
     const apiLinkItems = `${DB_HOST}/api/latest-items`
 

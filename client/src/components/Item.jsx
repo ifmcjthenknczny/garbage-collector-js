@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Item(props) {
-    const { checkboxEvent, name, id, tags, editable } = props;
+    const { checkboxEvent, editable, id, name, tags } = props;
+    
     const handleCheck = () => {
         checkboxEvent(id);
     }

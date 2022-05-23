@@ -1,12 +1,12 @@
 import express from 'express';
-import Item from '../models/item.model.js';
+import {
+    generateProjectObject,
+    generateQuerySyntax,
+    generateSearchResultObject
+} from '../helpers.js';
 import Collection from '../models/collection.model.js';
 import Comment from '../models/comment.model.js';
-import {
-    generateQuerySyntax,
-    generateProjectObject,
-    generateSearchResultObject
-} from '../helpers.js'
+import Item from '../models/item.model.js';
 
 const router = express.Router();
 
@@ -43,9 +43,8 @@ router.route('/search/:query').get(async (req, res) => {
             if (!itemFromComment) continue
             searchResults.push(generateSearchResultObject(itemFromComment, result.score))
             checkedItems[result.itemId] = result.score
-        } else if (checkedItems[result.itemId] < result.score) {
-            const index = searchResults.findIndex(obj => `${obj._id}` === `${result.itemId}`)
-            if (index !== -1) searchResults[index].score = result.score
+        } else if (checkedItems[result.itemId] < result.score && searchResults.findIndex(obj => `${obj._id}` === `${result.itemId}`) !== 1) {
+            searchResults[index].score = result.score
         }
     }
     for (let result of collectionSearchResult) {
@@ -55,9 +54,8 @@ router.route('/search/:query').get(async (req, res) => {
         for (let item of itemsFromCollectionSearch) {
             if (!checkedItems[item._id]) {
                 searchResults.push(generateSearchResultObject(item, result.score))
-            } else if (checkedItems[item._id] < result.score) {
-                const index = searchResults.findIndex(obj => `${obj._id}` === `${item._id}`)
-                if (index !== -1) searchResults[index].score = result.score
+            } else if (checkedItems[item._id] < result.score && searchResults.findIndex(obj => `${obj._id}` === `${item._id}`) !== 1) {
+                searchResults[index].score = result.score
             }
         }
     }

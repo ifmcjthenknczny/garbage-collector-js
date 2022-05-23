@@ -1,36 +1,54 @@
-import React, { useContext, useEffect, useState } from 'react'
-import dictionary from '../content';
-import LangContext from '../context/lang-context';
-import AuthContext from '../context/auth-context';
 import axios from 'axios';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import DB_HOST from "../DB_HOST"
-import '../styles/ItemPage.css'
-import CommentSection from './CommentSection';
-import ItemPageInput from './ItemPageInput'
-import Likebar from './Likebar';
-import LoadingSpinner from './LoadingSpinner'
-import ItemProperty from './ItemProperty';
-import { filterFromObject } from '../helpers';
 import { nanoid } from 'nanoid';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import CommentSection from '../components/CommentSection';
+import ItemPageInput from '../components/ItemPageInput';
+import ItemProperty from '../components/ItemProperty';
+import Likebar from '../components/Likebar';
+import LoadingSpinner from '../components/LoadingSpinner';
+import dictionary from '../content';
+import AuthContext from '../context/auth-context';
+import LangContext from '../context/lang-context';
+import DB_HOST from "../DB_HOST";
+import { filterFromObject } from '../helpers';
+import '../styles/ItemPage.css';
 
 export default function ItemPage() {
     const params = useParams();
     const { itemId: id } = params;
-    const [itemData, setItemData] = useState({})
-    const [loaded, setLoaded] = useState(false)
-    const [editOn, setEditOn] = useState(false)
-    const [propertyToEdit, setPropertyToEdit] = useState({});
+
     const ctxAuth = useContext(AuthContext);
     const ctxLang = useContext(LangContext);
+
+    const [editOn, setEditOn] = useState(false)
+    const [itemData, setItemData] = useState({})
+    const [loaded, setLoaded] = useState(false)
+    const [propertyToEdit, setPropertyToEdit] = useState({});
+
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchItemData();
     }, [id])
 
-    const { name, tags, added, collectionId, collectionName, likesFrom: whoLiked, rest, author } = itemData;
+    const { added, author, collectionId, collectionName, likesFrom: whoLiked, name, rest, tags } = itemData;
     const editable = author === ctxAuth.loggedUser || ctxAuth.isAdmin
+
+    const handleClickEdit = async (body) => {
+        if (editOn) return
+        setEditOn(true)
+        setItemData({ ...itemData, rest: filterFromObject(itemData.rest, body) })
+        setPropertyToEdit(body)
+    }
+
+    const handleDeleteProperty = async (payload) => {
+        const patchUrl = `${DB_HOST}/api/items/${id}`
+        const { [Object.keys(payload)]: removedProperty, ...newRest } = itemData.rest;
+        const body = { rest: newRest }
+        await axios.patch(patchUrl, body)
+        await fetchItemData();
+    }
 
     const fetchItemData = async () => {
         setLoaded(false)
@@ -51,25 +69,10 @@ export default function ItemPage() {
         else if (action === 'add') fetchItemData()
     }
 
-    const handleClickEdit = async (body) => {
-        if (editOn) return
-        setEditOn(true)
-        setItemData({ ...itemData, rest: filterFromObject(itemData.rest, body) })
-        setPropertyToEdit(body)
-    }
-
     const editEnd = async () => {
         setEditOn(false)
         setPropertyToEdit({})
         await fetchItemData()
-    }
-
-    const handleDeleteProperty = async (payload) => {
-        const patchUrl = `${DB_HOST}/api/items/${id}`
-        const { [Object.keys(payload)]: removedProperty, ...newRest } = itemData.rest;
-        const body = { rest: newRest }
-        await axios.patch(patchUrl, body)
-        await fetchItemData();
     }
 
     return (

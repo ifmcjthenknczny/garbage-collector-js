@@ -1,21 +1,23 @@
-import React, { useContext, useState, useEffect } from 'react'
+import axios from 'axios'
+import React, { useContext, useEffect, useState } from 'react'
+import dictionary from '../content'
 import AuthContext from '../context/auth-context'
 import LangContext from '../context/lang-context'
-import dictionary from '../content'
-import axios from 'axios'
 import DB_HOST from '../DB_HOST'
-import PanelButton from './PanelButton'
 import { generateLikeText } from '../helpers'
 import '../styles/Likebar.css'
+import PanelButton from './PanelButton'
 
 export default function Likebar(props) {
     const { itemId, whoLiked } = props;
+
     const ctxAuth = useContext(AuthContext);
-    const ctxLang = useContext(LangContext)
-    const [likes, setLikes] = useState(whoLiked.length)
+    const ctxLang = useContext(LangContext);
+
     const [alreadyLiked, setAlreadyLiked] = useState(whoLiked.includes(ctxAuth.loggedUser))
-    const [likeText, setLikeText] = useState(generateLikeText(likes, ctxLang.language))
     const [blockButton, setBlockButton] = useState(false)
+    const [likes, setLikes] = useState(whoLiked.length)
+    const [likeText, setLikeText] = useState(generateLikeText(likes, ctxLang.language))
 
     useEffect(() => {
         setLikeText(generateLikeText(likes, ctxLang.language))
