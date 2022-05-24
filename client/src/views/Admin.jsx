@@ -69,6 +69,7 @@ export default function Admin(props) {
 
     const blockUsers = async () => {
         await databaseRequest('BAN', { isActive: false });
+        if (checkedUsers.includes(ctxAuth.loggedUser)) ctxAuth.onLogout()
     }
 
     const unblockUsers = async () => {
@@ -84,6 +85,7 @@ export default function Admin(props) {
     const degradeFromAdmin = async () => {
         const requestBody = { isAdmin: false };
         await databaseRequest('REMOVE_ADMIN', requestBody);
+        if (checkedUsers.includes(ctxAuth.loggedUser)) ctxAuth.onLogout()
     }
 
     const databaseRequest = async (request, body) => {
