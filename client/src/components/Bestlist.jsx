@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import ThemeContext from '../context/theme-context';
-import '../styles/Bestlist.css';
 import ListElement from './ListElement';
 
 export default function Bestlist(props) {
