@@ -14,7 +14,7 @@ export default function ListElement(props) {
 
     return (
         <li className={"list-group-item d-flex justify-content-between align-items-start ListElement ".concat(themeClassName)}>
-            <div className="ms-2 ListElement__content d-flex flex-column justify-content-center">
+            <div className="ms-2 ListElement__content d-flex flex-column justify-content-center align-items-center">
                 <h6 className="fw-bold ListElement__name">
                     <Link className="Link--bestlist" to={linkUrl}>{name}</Link>
                 </h6>
